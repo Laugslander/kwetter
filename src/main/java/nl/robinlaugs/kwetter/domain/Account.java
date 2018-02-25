@@ -3,10 +3,7 @@ package nl.robinlaugs.kwetter.domain;
 import lombok.*;
 import lombok.Builder.Default;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -16,6 +13,14 @@ import static nl.robinlaugs.kwetter.domain.Role.USER;
  * @author Robin Laugs
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "Account.getByUsername",
+                query = "SELECT a FROM Account AS a WHERE a.username = :username"),
+        @NamedQuery(
+                name = "Account.getByCredentials",
+                query = "SELECT a FROM Account AS a WHERE a.username = :username AND a.password = :password")
+})
 @Data
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)

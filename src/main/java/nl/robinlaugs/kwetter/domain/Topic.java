@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import java.util.Collection;
 
 import static java.lang.Integer.compare;
@@ -14,6 +15,9 @@ import static lombok.AccessLevel.PROTECTED;
  * @author Robin Laugs
  */
 @Entity
+@NamedQuery(
+        name = "Topic.getByName",
+        query = "SELECT t FROM Topic AS t WHERE t.name = :name")
 @Data
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
