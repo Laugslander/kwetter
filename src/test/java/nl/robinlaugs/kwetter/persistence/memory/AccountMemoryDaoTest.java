@@ -5,7 +5,8 @@ import nl.robinlaugs.kwetter.persistence.AccountDao;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
@@ -22,54 +23,55 @@ public class AccountMemoryDaoTest {
 
     @Test
     public void readByUsername_validUsername_returnsAccount() {
-        Account account = Account.builder().username("username").build();
+        Account account = new Account();
+        account.setUsername("username");
+
         dao.create(account);
 
-        Account actual = dao.readByUsername("username");
-        Account expected = account;
-
-        assertThat(actual, is(equalTo(expected)));
+        assertThat(dao.readByUsername("username"), is(account));
     }
 
     @Test
     public void readByUsername_invalidUsername_returnsNull() {
-        Account account = Account.builder().username("username").build();
+        Account account = new Account();
+        account.setUsername("username");
+
         dao.create(account);
 
-        Account actual = dao.readByUsername("invalid");
-
-        assertThat(actual, is(nullValue()));
+        assertThat(dao.readByUsername("invalid"), is(nullValue()));
     }
 
     @Test
     public void readByCredentials_validCredentials_returnsAccount() {
-        Account account = Account.builder().username("username").password("password").build();
+        Account account = new Account();
+        account.setUsername("username");
+        account.setPassword("password");
+
         dao.create(account);
 
-        Account actual = dao.readByCredentials("username", "password");
-        Account expected = account;
-
-        assertThat(actual, is(equalTo(expected)));
+        assertThat(dao.readByCredentials("username", "password"), is(account));
     }
 
     @Test
     public void readByCredentials_invalidUsername_returnsNull() {
-        Account account = Account.builder().username("username").password("password").build();
+        Account account = new Account();
+        account.setUsername("username");
+        account.setPassword("password");
+
         dao.create(account);
 
-        Account actual = dao.readByCredentials("invalid", "password");
-
-        assertThat(actual, is(nullValue()));
+        assertThat(dao.readByCredentials("invalid", "password"), is(nullValue()));
     }
 
     @Test
     public void readByCredentials_invalidPassword_returnsNull() {
-        Account account = Account.builder().username("username").password("password").build();
+        Account account = new Account();
+        account.setUsername("username");
+        account.setPassword("password");
+
         dao.create(account);
 
-        Account actual = dao.readByCredentials("username", "invalid");
-
-        assertThat(actual, is(nullValue()));
+        assertThat(dao.readByCredentials("username", "invalid"), is(nullValue()));
     }
 
 }

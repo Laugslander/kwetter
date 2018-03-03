@@ -23,8 +23,9 @@ public abstract class BaseMemoryDao<T extends BaseEntity> {
         entities.put(id++, entity);
     }
 
-    public void update(T entity) {
+    public T update(T entity) {
         entities.put(entity.getId(), entity);
+        return entity;
     }
 
     public void delete(T entity) {

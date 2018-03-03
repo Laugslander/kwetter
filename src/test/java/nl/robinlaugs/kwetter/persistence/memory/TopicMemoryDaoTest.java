@@ -5,7 +5,8 @@ import nl.robinlaugs.kwetter.persistence.TopicDao;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
@@ -22,23 +23,22 @@ public class TopicMemoryDaoTest {
 
     @Test
     public void readByName_validName_returnsTopic() {
-        Topic topic = Topic.builder().name("name").build();
+        Topic topic = new Topic();
+        topic.setName("name");
+
         dao.create(topic);
 
-        Topic actual = dao.readByName("name");
-        Topic expected = topic;
-
-        assertThat(actual, is(equalTo(expected)));
+        assertThat(dao.readByName("name"), is(topic));
     }
 
     @Test
     public void readByName_invalidName_returnsNull() {
-        Topic topic = Topic.builder().name("name").build();
+        Topic topic = new Topic();
+        topic.setName("name");
+
         dao.create(topic);
 
-        Topic actual = dao.readByName("invalid");
-
-        assertThat(actual, is(nullValue()));
+        assertThat(dao.readByName("invalid"), is(nullValue()));
     }
 
 }

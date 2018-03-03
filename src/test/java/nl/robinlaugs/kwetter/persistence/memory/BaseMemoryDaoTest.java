@@ -11,9 +11,9 @@ import java.util.Collection;
 
 import static java.time.LocalDateTime.of;
 import static java.time.Month.JANUARY;
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 /**
  * @author Robin Laugs
@@ -38,10 +38,7 @@ public class BaseMemoryDaoTest {
 
         dao.create(entity);
 
-        BaseEntity actual = dao.read(entity.getId());
-        BaseEntity expected = entity;
-
-        assertThat(actual, is(equalTo(expected)));
+        assertThat(dao.read(entity.getId()), is(entity));
     }
 
     @Test
@@ -55,10 +52,16 @@ public class BaseMemoryDaoTest {
 
         dao.update(entity);
 
-        Long actual = dao.read(entity.getId()).getId();
-        Long expected = 2L;
+        assertThat(dao.read(entity.getId()).getId(), is(2L));
+    }
 
-        assertThat(actual, is(equalTo(expected)));
+    @Test
+    public void update_validExistingEntity_readsEntity() {
+        BaseEntity entity = new BaseEntityTester();
+
+        dao.create(entity);
+
+        assertThat(dao.update(entity), is(entity));
     }
 
     @Test
@@ -68,9 +71,7 @@ public class BaseMemoryDaoTest {
         dao.create(entity);
         dao.delete(entity.getId());
 
-        BaseEntity actual = dao.read(entity.getId());
-
-        assertThat(actual, is(nullValue()));
+        assertThat(dao.read(entity.getId()), is(nullValue()));
     }
 
     @Test
@@ -82,9 +83,7 @@ public class BaseMemoryDaoTest {
 
         dao.delete(id);
 
-        BaseEntity actual = dao.read(id);
-
-        assertThat(actual, is(nullValue()));
+        assertThat(dao.read(id), is(nullValue()));
     }
 
     @Test
@@ -94,10 +93,7 @@ public class BaseMemoryDaoTest {
         dao.create(entity);
         Long id = entity.getId();
 
-        BaseEntity actual = dao.read(id);
-        BaseEntity expected = entity;
-
-        assertThat(actual, is(equalTo(expected)));
+        assertThat(dao.read(id), is(entity));
     }
 
     @Test
@@ -110,10 +106,7 @@ public class BaseMemoryDaoTest {
         dao.create(entity2);
         dao.create(entity3);
 
-        int actual = dao.readAll().size();
-        int expected = 3;
-
-        assertThat(actual, is(equalTo(expected)));
+        assertThat(dao.readAll().size(), is(3));
     }
 
     @Test
@@ -126,10 +119,7 @@ public class BaseMemoryDaoTest {
         dao.create(entity2);
         dao.create(entity3);
 
-        Collection<BaseEntity> actual = dao.readAll();
-        Collection<BaseEntity> expected = asList(entity1, entity2, entity3);
-
-        assertThat(actual.containsAll(expected), is(true));
+        assertThat((Collection<BaseEntity>) dao.readAll(), containsInAnyOrder(entity1, entity2, entity3));
     }
 
     @Test
@@ -151,10 +141,8 @@ public class BaseMemoryDaoTest {
         dao.create(entity3);
 
         LocalDateTime timestamp = of(2019, JANUARY, 1, 0, 0);
-        Collection<BaseEntity> actual = dao.readFromTimestamp(timestamp);
-        Collection<BaseEntity> expected = asList(entity2, entity3);
 
-        assertThat(actual.containsAll(expected), is(true));
+        assertThat((Collection<BaseEntity>) dao.readFromTimestamp(timestamp), containsInAnyOrder(entity2, entity3));
     }
 
 }

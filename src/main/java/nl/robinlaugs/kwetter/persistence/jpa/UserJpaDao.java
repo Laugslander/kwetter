@@ -3,6 +3,7 @@ package nl.robinlaugs.kwetter.persistence.jpa;
 import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.persistence.UserDao;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 
@@ -14,7 +15,8 @@ import javax.enterprise.inject.Default;
 @JpaDao
 public class UserJpaDao extends BaseJpaDao<User> implements UserDao {
 
-    public UserJpaDao() {
+    @PostConstruct
+    private void setUp() {
         setImplementation(User.class);
     }
 

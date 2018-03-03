@@ -10,11 +10,11 @@ import java.util.Collection;
  */
 public interface GenericDao<T extends BaseEntity> {
 
-    void create(T instance);
+    void create(T entity);
 
-    void update(T instance);
+    T update(T entity);
 
-    void delete(T instance);
+    void delete(T entity);
 
     void delete(Long id);
 

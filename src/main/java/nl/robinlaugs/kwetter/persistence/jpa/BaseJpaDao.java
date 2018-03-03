@@ -23,8 +23,8 @@ public abstract class BaseJpaDao<T extends BaseEntity> {
         manager.persist(entity);
     }
 
-    public void update(T entity) {
-        manager.merge(entity);
+    public T update(T entity) {
+        return manager.merge(entity);
     }
 
     public void delete(T entity) {
@@ -41,21 +41,21 @@ public abstract class BaseJpaDao<T extends BaseEntity> {
     }
 
     public Collection<T> readAll() {
-        String query = format("FROM %s", implementation.getName());
+        String query = format("FROM %s AS e", implementation.getName());
+
         return manager.createQuery(query, implementation).getResultList();
     }
 
     public Collection<T> readFromTimestamp(LocalDateTime timestamp) {
-        String query = format("FROM %s WHERE timestamp >= %s", implementation.getName(), timestamp);
-        return manager.createQuery(query, implementation).getResultList();
+        String query = format("FROM %s AS e WHERE e.timestamp >= :timestamp", implementation.getName());
+
+        return manager.createQuery(query, implementation)
+                .setParameter("timestamp", timestamp)
+                .getResultList();
     }
 
     EntityManager getManager() {
         return manager;
-    }
-
-    public void setManager(EntityManager manager) {
-        this.manager = manager;
     }
 
     void setImplementation(Class<T> implementation) {

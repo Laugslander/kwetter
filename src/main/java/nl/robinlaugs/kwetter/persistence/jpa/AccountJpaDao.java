@@ -25,7 +25,8 @@ public class AccountJpaDao extends BaseJpaDao<Account> implements AccountDao {
         return getManager()
                 .createNamedQuery("Account.getByUsername", Account.class)
                 .setParameter("username", username)
-                .getSingleResult();
+                .getResultList().stream()
+                .findFirst().orElse(null);
     }
 
     @Override
@@ -34,7 +35,8 @@ public class AccountJpaDao extends BaseJpaDao<Account> implements AccountDao {
                 .createNamedQuery("Account.getByCredentials", Account.class)
                 .setParameter("username", username)
                 .setParameter("password", password)
-                .getSingleResult();
+                .getResultList().stream()
+                .findFirst().orElse(null);
     }
 
 }
