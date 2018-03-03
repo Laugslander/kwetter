@@ -1,39 +1,45 @@
 package nl.robinlaugs.kwetter.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import nl.robinlaugs.kwetter.domain.Message;
-import nl.robinlaugs.kwetter.persistence.MessageDao;
-import nl.robinlaugs.kwetter.persistence.jpa.JpaDao;
+import nl.robinlaugs.kwetter.domain.User;
+import nl.robinlaugs.kwetter.service.interceptor.MentionParsingInterceptor;
+import nl.robinlaugs.kwetter.service.interceptor.TextParsingInterceptor;
+import nl.robinlaugs.kwetter.service.interceptor.TopicParsingInterceptor;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import java.util.Collection;
-
-import static java.util.stream.Collectors.toSet;
 
 /**
  * @author Robin Laugs
  */
-@Stateless
-@AllArgsConstructor(onConstructor = @__(@Inject))
-@NoArgsConstructor
-public class MessageService extends BaseService<Message> {
+public interface MessageService extends GenericService<Message> {
 
-    @JpaDao
-    private MessageDao dao;
+    @Override
+    @Interceptors({TextParsingInterceptor.class, MentionParsingInterceptor.class, TopicParsingInterceptor.class})
+    void create(Message message) throws Exception;
 
-    @PostConstruct
-    private void setUp() {
-        super.setDao(dao);
-    }
+    /**
+     * Searches all existing {@link Message Messages}.
+     *
+     * @param text The search query which should (partially) match the {@code text} of existing {@link Message Messages}.
+     * @return The {@link Message messages} that were found.
+     */
+    Collection<Message> search(String text);
 
-    public Collection<Message> search(String text) {
-        return dao.readAll().stream()
-                .filter(m -> m.getText().toLowerCase().contains(text.toLowerCase()))
-                .sorted()
-                .collect(toSet());
-    }
+    /**
+     * Likes an existing {@link Message} as a {@link User}.
+     *
+     * @param message The {@link Message} that should be liked.
+     * @param user    The {@link User} that should like the {@link Message}.
+     */
+    void like(Message message, User user);
+
+    /**
+     * Unlikes an existing {@link Message} as a {@link User}.
+     *
+     * @param message The {@link Message} that should be unliked.
+     * @param user    The {@link User} that should unlike the {@link Message}.
+     */
+    void unlike(Message message, User user);
 
 }

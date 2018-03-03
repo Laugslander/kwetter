@@ -1,9 +1,9 @@
-package nl.robinlaugs.kwetter.service;
+package nl.robinlaugs.kwetter.service.main;
 
 import nl.robinlaugs.kwetter.persistence.GenericDao;
 import nl.robinlaugs.kwetter.tester.BaseEntityTester;
+import nl.robinlaugs.kwetter.tester.BaseMainServiceTester;
 import nl.robinlaugs.kwetter.tester.BaseMemoryDaoTester;
-import nl.robinlaugs.kwetter.tester.BaseServiceTester;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,16 +23,16 @@ import static org.mockito.Mockito.verify;
  * @author Robin Laugs
  */
 @RunWith(MockitoJUnitRunner.class)
-public class BaseServiceTest {
+public class BaseMainServiceTest {
 
-    private BaseService<BaseEntityTester> service;
+    private BaseMainService<BaseEntityTester> service;
 
     @Mock
     private GenericDao<BaseEntityTester> dao;
 
     @Before
     public void setUp() {
-        service = new BaseServiceTester();
+        service = new BaseMainServiceTester();
         service.setDao(dao);
     }
 

@@ -1,10 +1,11 @@
-package nl.robinlaugs.kwetter.service;
+package nl.robinlaugs.kwetter.service.main;
 
 import nl.robinlaugs.kwetter.domain.Topic;
 import nl.robinlaugs.kwetter.persistence.TopicDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -17,27 +18,31 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * @author Robin Laugs
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TopicServiceTest {
+public class TopicMainServiceTest {
 
-    private TopicService service;
+    @InjectMocks
+    private TopicMainService service;
 
     @Mock
     private TopicDao dao;
 
     @Before
     public void setUp() {
-        service = new TopicService(dao);
+        initMocks(this);
     }
 
     @Test
     public void read_validName_callsDao() {
-        Topic topic = Topic.builder().name("name").build();
+        Topic topic = new Topic();
+        topic.setName("name");
 
         when(dao.readByName("name")).thenReturn(topic);
 
@@ -49,11 +54,11 @@ public class TopicServiceTest {
     @Test
     public void readTrendingTopics_validFromTimestampAndLimit_returnsTrendingTopics() {
         LocalDateTime timestamp1 = of(2018, JANUARY, 1, 0, 0);
-        Topic topic1 = Topic.builder().build();
+        Topic topic1 = new Topic();
         topic1.setTimestamp(timestamp1);
 
         LocalDateTime timestamp2 = of(2019, JANUARY, 1, 0, 0);
-        Topic topic2 = Topic.builder().build();
+        Topic topic2 = new Topic();
         topic2.setTimestamp(timestamp2);
 
         Collection<Topic> topics = asList(topic1, topic2);
@@ -62,9 +67,8 @@ public class TopicServiceTest {
         when(dao.readFromTimestamp(timestamp)).thenReturn(topics);
 
         Collection<Topic> actual = service.readTrendingTopics(timestamp, 1);
-        Collection<Topic> expected = asList(topic2);
 
         assertThat(actual.size(), is(equalTo(1)));
-        assertThat(actual.containsAll(expected), is(true));
+        assertThat(actual, contains(topic2));
     }
 }

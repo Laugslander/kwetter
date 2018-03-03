@@ -1,46 +1,31 @@
 package nl.robinlaugs.kwetter.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import nl.robinlaugs.kwetter.domain.Message;
 import nl.robinlaugs.kwetter.domain.Topic;
-import nl.robinlaugs.kwetter.persistence.TopicDao;
-import nl.robinlaugs.kwetter.persistence.jpa.JpaDao;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.Collection;
-
-import static java.util.stream.Collectors.toSet;
 
 /**
  * @author Robin Laugs
  */
-@Stateless
-@AllArgsConstructor(onConstructor = @__(@Inject))
-@NoArgsConstructor
-public class TopicService extends BaseService<Topic> {
+public interface TopicService extends GenericService<Topic> {
 
-    @JpaDao
-    private TopicDao dao;
+    /**
+     * Reads an existing {@link Topic}.
+     *
+     * @param name The {@code name} of the existing {@link Topic} that should be read.
+     * @return The {@link Topic} that was read.
+     */
+    Topic read(String name);
 
-    @PostConstruct
-    private void setUp() {
-        super.setDao(dao);
-    }
-
-    public Topic read(String name) {
-        return dao.readByName(name);
-    }
-
-    public Collection<Topic> readTrendingTopics(LocalDateTime from, int limit) {
-        Collection<Topic> topics = dao.readFromTimestamp(from);
-
-        return topics.stream()
-                .sorted()
-                .limit(limit)
-                .collect(toSet());
-    }
+    /**
+     * Reads all existing trending {@link Topic Topics}.
+     *
+     * @param from  The {@link LocalDateTime} from when all existing {@link Topic Topics} should be read.
+     * @param limit The maximum number of {@link Message Messages} that should be read.
+     * @return The {@link Message Messages} that were read.
+     */
+    Collection<Topic> readTrendingTopics(LocalDateTime from, int limit);
 
 }

@@ -1,4 +1,4 @@
-package nl.robinlaugs.kwetter.service;
+package nl.robinlaugs.kwetter.service.main;
 
 import nl.robinlaugs.kwetter.domain.BaseEntity;
 import nl.robinlaugs.kwetter.persistence.GenericDao;
@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * @author Robin Laugs
  */
-public abstract class BaseService<T extends BaseEntity> {
+public abstract class BaseMainService<T extends BaseEntity> {
 
     private GenericDao<T> dao;
 

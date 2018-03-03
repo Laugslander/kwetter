@@ -1,4 +1,4 @@
-package nl.robinlaugs.kwetter.service;
+package nl.robinlaugs.kwetter.service.main;
 
 import nl.robinlaugs.kwetter.domain.Message;
 import nl.robinlaugs.kwetter.domain.User;
@@ -7,6 +7,7 @@ import nl.robinlaugs.kwetter.persistence.UserDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -20,27 +21,32 @@ import static nl.robinlaugs.kwetter.domain.User.MAX_BIO_CHARACTERS;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * @author Robin Laugs
  */
 @RunWith(MockitoJUnitRunner.class)
-public class UserServiceTest {
+public class UserMainServiceTest {
 
-    private UserService service;
+    @InjectMocks
+    private UserMainService service;
 
     @Mock
     private UserDao dao;
 
     @Before
     public void setUp() {
-        service = new UserService(dao);
+        initMocks(this);
     }
 
     @Test(expected = InputConstraintViolationException.class)
-    public void update_validBio_callsDao() throws Exception {
+    public void update_tooLongBio_callsDao() throws Exception {
         String bio = new String(new char[MAX_BIO_CHARACTERS + 1]).replace("\0", "a");
-        User user = User.builder().bio(bio).build();
+        User user = new User();
+        user.setBio(bio);
 
         service.update(user);
     }
@@ -48,42 +54,45 @@ public class UserServiceTest {
     @Test
     public void readAll_validUser_readsAllMessages() {
         LocalDateTime timestamp1 = of(2018, JANUARY, 1, 0, 0);
-        Message message1 = Message.builder().build();
+        Message message1 = new Message();
         message1.setTimestamp(timestamp1);
 
         LocalDateTime timestamp2 = of(2019, JANUARY, 1, 0, 0);
-        Message message2 = Message.builder().build();
+        Message message2 = new Message();
         message1.setTimestamp(timestamp2);
 
-        User following = User.builder().message(message1).build();
-        User user = User.builder().message(message2).following(following).build();
+        User following = new User();
+        following.getMessages().add(message1);
+
+        User user = new User();
+        user.getMessages().add(message2);
+        user.getFollowings().add(following);
 
         Collection<Message> actual = service.readAll(user);
-        Collection<Message> expected = asList(message1, message2);
 
         assertThat(actual.size(), is(equalTo(2)));
-        assertThat(actual.containsAll(expected), is(true));
+        assertThat(actual, containsInAnyOrder(message1, message2));
     }
 
     @Test
     public void readOwn_validUserAndLimit_readsOwnMessages() {
         LocalDateTime timestamp1 = of(2018, JANUARY, 1, 0, 0);
-        Message message1 = Message.builder().build();
+        Message message1 = new Message();
         message1.setTimestamp(timestamp1);
 
         LocalDateTime timestamp2 = of(2019, JANUARY, 1, 0, 0);
-        Message message2 = Message.builder().build();
+        Message message2 = new Message();
         message2.setTimestamp(timestamp2);
 
         Collection<Message> messages = asList(message1, message2);
 
-        User user = User.builder().messages(messages).build();
+        User user = new User();
+        user.setMessages(messages);
 
         Collection<Message> actual = service.readOwn(user, 1);
-        Collection<Message> expected = asList(message2);
 
         assertThat(actual.size(), is(equalTo(1)));
-        assertThat(actual.containsAll(expected), is(true));
+        assertThat(actual, contains(message2));
     }
 
 }

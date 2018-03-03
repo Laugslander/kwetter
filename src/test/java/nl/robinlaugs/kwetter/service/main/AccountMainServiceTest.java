@@ -1,4 +1,4 @@
-package nl.robinlaugs.kwetter.service;
+package nl.robinlaugs.kwetter.service.main;
 
 import nl.robinlaugs.kwetter.domain.Account;
 import nl.robinlaugs.kwetter.exception.DuplicateUsernameException;
@@ -7,31 +7,35 @@ import nl.robinlaugs.kwetter.persistence.AccountDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * @author Robin Laugs
  */
 @RunWith(MockitoJUnitRunner.class)
-public class AccountServiceTest {
+public class AccountMainServiceTest {
 
-    private AccountService service;
+    @InjectMocks
+    private AccountMainService service;
 
     @Mock
     private AccountDao dao;
 
     @Before
     public void setUp() {
-        service = new AccountService(dao);
+        initMocks(this);
     }
 
     @Test(expected = DuplicateUsernameException.class)
     public void create_accountWithDuplicateUsername_throwsException() throws Exception {
-        Account account = Account.builder().username("username").build();
+        Account account = new Account();
+        account.setUsername("username");
 
         when(dao.readByUsername("username")).thenReturn(account);
 
@@ -40,7 +44,8 @@ public class AccountServiceTest {
 
     @Test(expected = DuplicateUsernameException.class)
     public void update_accountWithDuplicateUsername_throwsException() throws Exception {
-        Account account = Account.builder().username("username").build();
+        Account account = new Account();
+        account.setUsername("username");
 
         when(dao.readByUsername("username")).thenReturn(account);
 
@@ -49,7 +54,8 @@ public class AccountServiceTest {
 
     @Test
     public void read_validUsername_callsDao() {
-        Account account = Account.builder().username("username").build();
+        Account account = new Account();
+        account.setUsername("username");
 
         when(dao.readByUsername("username")).thenReturn(account);
 
@@ -60,7 +66,9 @@ public class AccountServiceTest {
 
     @Test
     public void read_validCredentials_callsDao() throws Exception {
-        Account account = Account.builder().username("username").password("password").build();
+        Account account = new Account();
+        account.setUsername("username");
+        account.setPassword("password");
 
         when(dao.readByCredentials("username", "password")).thenReturn(account);
 
