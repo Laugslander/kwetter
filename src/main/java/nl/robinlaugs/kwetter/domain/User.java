@@ -1,23 +1,24 @@
 package nl.robinlaugs.kwetter.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.TreeSet;
 
-import static lombok.AccessLevel.PRIVATE;
-import static lombok.AccessLevel.PROTECTED;
+import static javax.persistence.CascadeType.*;
 
 /**
  * @author Robin Laugs
  */
-@Entity
+@Entity(name = "t_user")
 @Data
-@NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PRIVATE)
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@Builder
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, of = {"name", "avatar", "location", "website", "bio"})
+@ToString(callSuper = true, of = {"name", "avatar", "location", "website", "bio"})
 public class User extends BaseEntity {
 
     public static final int MAX_BIO_CHARACTERS = 160;
@@ -30,30 +31,25 @@ public class User extends BaseEntity {
 
     private String website;
 
-    @Column(length = 160)
+    @Column(length = MAX_BIO_CHARACTERS)
     private String bio;
 
     @OneToOne
     private Account account;
 
-    @ManyToMany(mappedBy = "followers")
-    @Singular
-    private Collection<User> followings;
+    @ManyToMany(mappedBy = "followers", cascade = {PERSIST, MERGE})
+    private Collection<User> followings = new TreeSet<>();
 
     @ManyToMany
-    @Singular
-    private Collection<User> followers;
+    private Collection<User> followers = new TreeSet<>();
 
-    @OneToMany(mappedBy = "author")
-    @Singular
-    private Collection<Message> messages;
+    @OneToMany(mappedBy = "author", cascade = ALL)
+    private Collection<Message> messages = new TreeSet<>();
 
-    @ManyToMany(mappedBy = "likes")
-    @Singular(value = "like")
-    private Collection<Message> liked;
+    @ManyToMany(mappedBy = "likes", cascade = {PERSIST, MERGE})
+    private Collection<Message> liked = new TreeSet<>();
 
-    @ManyToMany(mappedBy = "mentions")
-    @Singular(value = "mention")
-    private Collection<Message> mentioned;
+    @ManyToMany(mappedBy = "mentions", cascade = {PERSIST, MERGE})
+    private Collection<Message> mentioned = new TreeSet<>();
 
 }

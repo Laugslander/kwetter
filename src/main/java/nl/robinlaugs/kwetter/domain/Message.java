@@ -2,45 +2,41 @@ package nl.robinlaugs.kwetter.domain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Collection;
-
-import static lombok.AccessLevel.PRIVATE;
-import static lombok.AccessLevel.PROTECTED;
+import java.util.TreeSet;
 
 /**
  * @author Robin Laugs
  */
-@Entity
+@Entity(name = "t_message")
 @Data
-@NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PRIVATE)
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@Builder
+@NoArgsConstructor
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = true, of = "text")
+@ToString(callSuper = true, of = "text")
 public class Message extends BaseEntity {
 
     public static final int MAX_TEXT_CHARACTERS = 140;
 
     @Column(length = MAX_TEXT_CHARACTERS)
+    @NonNull
     private String text;
 
     @ManyToOne
     private User author;
 
     @ManyToMany
-    @Singular
-    private Collection<User> likes;
+    @JoinTable(name = "t_message_t_user_likes",
+            joinColumns = @JoinColumn(name = "message_ID"), inverseJoinColumns = @JoinColumn(name = "like_ID"))
+    private Collection<User> likes = new TreeSet<>();
 
     @ManyToMany
-    @Singular
-    private Collection<User> mentions;
+    @JoinTable(name = "t_message_t_user_mention",
+            joinColumns = @JoinColumn(name = "message_ID"), inverseJoinColumns = @JoinColumn(name = "mention_ID"))
+    private Collection<User> mentions = new TreeSet<>();
 
     @ManyToMany
-    @Singular
-    private Collection<Topic> topics;
+    private Collection<Topic> topics = new TreeSet<>();
 
 }
