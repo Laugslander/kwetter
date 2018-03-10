@@ -1,7 +1,7 @@
 package nl.robinlaugs.kwetter.persistence.jpa;
 
-import nl.robinlaugs.kwetter.domain.Account;
-import nl.robinlaugs.kwetter.persistence.AccountDao;
+import nl.robinlaugs.kwetter.domain.Topic;
+import nl.robinlaugs.kwetter.persistence.TopicDao;
 import nl.robinlaugs.kwetter.service.util.TestDataService;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -26,11 +26,11 @@ import static org.jboss.shrinkwrap.resolver.api.maven.Maven.resolver;
  */
 @RunWith(Arquillian.class)
 @UsingDataSet("empty-dataset.yml")
-public class AccountJpaDaoIntegrationTest {
+public class TopicJpaDaoIntegrationTest {
 
     @Inject
     @JpaDao
-    private AccountDao dao;
+    private TopicDao dao;
 
     @Deployment
     public static WebArchive deploy() {
@@ -46,40 +46,21 @@ public class AccountJpaDaoIntegrationTest {
     }
 
     @Test
-    public void readByUsername_validUsername_readsAccount() {
-        Account account = new Account("username", "password");
+    public void readByName_validName_readsTopic() {
+        Topic topic = new Topic("name");
 
-        dao.create(account);
+        dao.create(topic);
 
-        assertThat(dao.readByUsername("username"), is(account));
+        assertThat(dao.readByName("name"), is(topic));
     }
 
     @Test
-    public void readByCredentials_validCredentials_readsAccount() {
-        Account account = new Account("username", "password");
+    public void readByName_invalidName_readsNull() {
+        Topic topic = new Topic("name");
 
-        dao.create(account);
+        dao.create(topic);
 
-        assertThat(dao.readByCredentials("username", "password"), is(account));
-    }
-
-    @Test
-    public void readByCredentials_invalidUsername_readsNull() {
-        Account account = new Account("username", "password");
-
-        dao.create(account);
-
-        assertThat(dao.readByCredentials("invalid", "password"), is(nullValue()));
-    }
-
-
-    @Test
-    public void readByCredentials_invalidPassword_readsNull() {
-        Account account = new Account("username", "password");
-
-        dao.create(account);
-
-        assertThat(dao.readByCredentials("username", "invalid"), is(nullValue()));
+        assertThat(dao.readByName("invalid"), is(nullValue()));
     }
 
 }
