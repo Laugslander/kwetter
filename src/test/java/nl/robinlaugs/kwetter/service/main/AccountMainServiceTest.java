@@ -66,9 +66,7 @@ public class AccountMainServiceTest {
 
     @Test
     public void read_validCredentials_callsDao() throws Exception {
-        Account account = new Account();
-        account.setUsername("username");
-        account.setPassword("password");
+        Account account = new Account("username", "password");
 
         when(dao.readByCredentials("username", "password")).thenReturn(account);
 

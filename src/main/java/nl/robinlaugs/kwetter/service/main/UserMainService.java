@@ -39,9 +39,10 @@ public class UserMainService extends BaseMainService<User> implements UserServic
             throw new InputConstraintViolationException(message);
         }
 
-        dao.update(user);
+        super.update(user);
     }
 
+    @Override
     public Collection<Message> readAll(User user) {
         Collection<Message> messages = new TreeSet<>(user.getMessages());
         user.getFollowings().forEach(f -> messages.addAll(f.getMessages()));
@@ -49,11 +50,24 @@ public class UserMainService extends BaseMainService<User> implements UserServic
         return messages;
     }
 
+    @Override
     public Collection<Message> readOwn(User user, int limit) {
         return user.getMessages().stream()
                 .sorted()
                 .limit(limit)
                 .collect(toSet());
+    }
+
+    @Override
+    public void follow(User user, User follower) {
+        user.getFollowers().add(follower);
+        follower.getFollowings().add(user);
+    }
+
+    @Override
+    public void unfollow(User user, User follower) {
+        user.getFollowers().remove(follower);
+        follower.getFollowings().remove(user);
     }
 
 }

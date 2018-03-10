@@ -138,7 +138,9 @@ public class MessageMainServiceTest {
         Message message = new Message();
         User user = new User();
 
-        service.like(message, user);
+        message.getLikes().add(user);
+        user.getLiked().add(message);
+
         service.unlike(message, user);
 
         assertThat(message.getLikes(), not(contains(user)));

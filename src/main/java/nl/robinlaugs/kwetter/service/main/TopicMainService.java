@@ -28,10 +28,12 @@ public class TopicMainService extends BaseMainService<Topic> implements TopicSer
         super.setDao(dao);
     }
 
+    @Override
     public Topic read(String name) {
         return dao.readByName(name);
     }
 
+    @Override
     public Collection<Topic> readTrendingTopics(LocalDateTime from, int limit) {
         Collection<Topic> topics = dao.readFromTimestamp(from);
 

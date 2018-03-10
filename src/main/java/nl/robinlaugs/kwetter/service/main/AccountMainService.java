@@ -35,20 +35,22 @@ public class AccountMainService extends BaseMainService<Account> implements Acco
 
         account.getUser().setAccount(account);
 
-        dao.create(account);
+        super.create(account);
     }
 
     @Override
     public void update(Account account) throws Exception {
         if (nonNull(dao.readByUsername(account.getUsername()))) throw new DuplicateUsernameException();
 
-        dao.update(account);
+        super.update(account);
     }
 
+    @Override
     public Account read(String username) {
         return dao.readByUsername(username);
     }
 
+    @Override
     public Account read(String username, String password) throws Exception {
         Account account = dao.readByCredentials(username, password);
 

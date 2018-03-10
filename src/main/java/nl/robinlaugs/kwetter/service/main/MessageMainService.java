@@ -49,9 +49,10 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
         message.getMentions().forEach(m -> m.getMentioned().add(message));
         message.getTopics().forEach(t -> t.getMessages().add(message));
 
-        dao.create(message);
+        super.create(message);
     }
 
+    @Override
     public Collection<Message> search(String text) {
         return dao.readAll().stream()
                 .filter(m -> m.getText().toLowerCase().contains(text.toLowerCase()))
@@ -59,6 +60,7 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
                 .collect(toSet());
     }
 
+    @Override
     public void like(Message message, User user) {
         message.getLikes().add(user);
         user.getLiked().add(message);
@@ -66,6 +68,7 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
         dao.update(message);
     }
 
+    @Override
     public void unlike(Message message, User user) {
         message.getLikes().remove(user);
         user.getLiked().remove(message);

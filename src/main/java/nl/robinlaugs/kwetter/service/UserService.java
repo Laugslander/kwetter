@@ -27,4 +27,20 @@ public interface UserService extends GenericService<User> {
      */
     Collection<Message> readOwn(User user, int limit);
 
+    /**
+     * Follows an existing {@link User} as another @{link User}.
+     *
+     * @param user     The {@link User} that should be followed.
+     * @param follower The {@link User} that want follow the user.
+     */
+    void follow(User user, User follower);
+
+    /**
+     * Unfollows an existing {@link User} as another {@link User}.
+     *
+     * @param user     The {@link User} that should be unfollowed.
+     * @param follower The {@link User} that wants to unfollow the user.
+     */
+    void unfollow(User user, User follower);
+
 }

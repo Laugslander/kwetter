@@ -18,8 +18,7 @@ import static java.time.LocalDateTime.of;
 import static java.time.Month.JANUARY;
 import static java.util.Arrays.asList;
 import static nl.robinlaugs.kwetter.domain.User.MAX_BIO_CHARACTERS;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -93,6 +92,31 @@ public class UserMainServiceTest {
 
         assertThat(actual.size(), is(equalTo(1)));
         assertThat(actual, contains(message2));
+    }
+
+    @Test
+    public void follow_validUserAndFollower_userFollowedByFollower() {
+        User user = new User();
+        User follower = new User();
+
+        service.follow(user, follower);
+
+        assertThat(user.getFollowers(), contains(follower));
+        assertThat(follower.getFollowings(), contains(user));
+    }
+
+    @Test
+    public void unfollow_validUserAndFollower_userUnfollowedByFollower() {
+        User user = new User();
+        User follower = new User();
+
+        user.getFollowers().add(follower);
+        follower.getFollowings().add(user);
+
+        service.unfollow(user, follower);
+
+        assertThat(user.getFollowers(), not(contains(follower)));
+        assertThat(follower.getFollowings(), not(contains(user)));
     }
 
 }
