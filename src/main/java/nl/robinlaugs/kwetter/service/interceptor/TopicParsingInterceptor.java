@@ -49,7 +49,7 @@ public class TopicParsingInterceptor extends BaseParsingInterceptor {
         }
     }
 
-    public Collection<Topic> parseTopics(Collection<String> words) {
+    Collection<Topic> parseTopics(Collection<String> words) {
         Collection<String> topics = parse(words, TAG_TOPIC);
 
         return topics.stream()

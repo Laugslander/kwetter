@@ -50,7 +50,7 @@ public class MentionParsingInterceptor extends BaseParsingInterceptor {
         }
     }
 
-    public Collection<User> parseMentions(Collection<String> words) {
+    Collection<User> parseMentions(Collection<String> words) {
         Collection<String> mentions = parse(words, TAG_MENTION);
 
         return mentions.stream()

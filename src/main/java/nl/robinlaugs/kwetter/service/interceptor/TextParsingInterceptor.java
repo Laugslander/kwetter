@@ -44,7 +44,7 @@ public class TextParsingInterceptor {
         }
     }
 
-    public String replaceWords(String text) {
+    String replaceWords(String text) {
         return WORDS_TO_REPLACE.entrySet().stream()
                 .reduce(text, (k, v) -> k.replace(v.getKey(), v.getValue()), (k, v) -> null);
     }
