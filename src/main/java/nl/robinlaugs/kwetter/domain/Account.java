@@ -11,14 +11,12 @@ import static nl.robinlaugs.kwetter.domain.Role.USER;
  * @author Robin Laugs
  */
 @Entity(name = "t_account")
-@NamedQueries({
-        @NamedQuery(
-                name = "Account.getByUsername",
-                query = "SELECT a FROM t_account AS a WHERE a.username = :username"),
-        @NamedQuery(
-                name = "Account.getByCredentials",
-                query = "SELECT a FROM t_account AS a WHERE a.username = :username AND a.password = :password")
-})
+@NamedQuery(
+        name = "Account.getByUsername",
+        query = "SELECT a FROM t_account AS a WHERE a.username = :username")
+@NamedQuery(
+        name = "Account.getByCredentials",
+        query = "SELECT a FROM t_account AS a WHERE a.username = :username AND a.password = :password")
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
