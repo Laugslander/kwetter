@@ -17,7 +17,8 @@ import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -59,7 +60,7 @@ public class TopicResourceTest {
         Topic topic = new Topic("name");
         topic.setId(1L);
 
-        when(service.read(anyLong())).thenReturn(topic);
+        when(service.read(1L)).thenReturn(topic);
 
         Response response = resource.getTopic(1L);
 

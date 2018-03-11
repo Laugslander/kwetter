@@ -68,11 +68,10 @@ public class UserResourceTest {
     @Test
     public void getUser_validUserId_getsUser() {
         User user = new User();
-        user.setId(1L);
         user.setName("name");
         user.setAccount(new Account());
 
-        when(service.read(anyLong())).thenReturn(user);
+        when(service.read(1L)).thenReturn(user);
 
         Response response = resource.getUser(1L);
 
@@ -83,15 +82,14 @@ public class UserResourceTest {
     }
 
     @Test
-    public void patchUser_validUser_patchesAndReturnsUser() {
+    public void patchUser_validUser_patchesAndReturnsUser() throws Exception {
         User user = new User();
-        user.setId(1L);
         user.setName("name");
         user.setAccount(new Account());
 
-        when(service.read(anyLong())).thenReturn(user);
+        when(service.update(1L, user)).thenReturn(user);
 
-        Response response = resource.patchUser(user);
+        Response response = resource.patchUser(1L, user);
 
         UserDto dto = (UserDto) response.getEntity();
 
@@ -102,13 +100,12 @@ public class UserResourceTest {
     @Test
     public void patchUser_invalidAccount_returnsException() throws Exception {
         User user = new User();
-        user.setId(1L);
         user.setName("name");
         user.setAccount(new Account());
 
-        doThrow(Exception.class).when(service).update(any(User.class));
+        doThrow(Exception.class).when(service).update(1L, user);
 
-        Response response = resource.patchUser(user);
+        Response response = resource.patchUser(1L, user);
 
         ExceptionDto dto = (ExceptionDto) response.getEntity();
 
@@ -162,21 +159,21 @@ public class UserResourceTest {
 
     @Test
     public void timelineMessages_validUserId_getsTimelineMessages() {
-        User user1 = new User();
-        user1.setId(1L);
-        user1.setAccount(new Account());
+        User user = new User();
+        user.setId(1L);
+        user.setAccount(new Account());
 
         Message message1 = new Message();
-        message1.setAuthor(user1);
+        message1.setAuthor(user);
 
         Message message2 = new Message();
-        message2.setAuthor(user1);
+        message2.setAuthor(user);
 
         Collection<Message> messages = new ArrayList<>();
         messages.add(message1);
         messages.add(message2);
 
-        when(service.read(anyLong())).thenReturn(user1);
+        when(service.read(1L)).thenReturn(user);
         when(service.readAll(any(User.class))).thenReturn(messages);
 
         Response response = resource.timelineMessages(1L);
@@ -203,7 +200,7 @@ public class UserResourceTest {
         messages.add(message1);
         messages.add(message2);
 
-        when(service.read(anyLong())).thenReturn(user1);
+        when(service.read(1L)).thenReturn(user1);
         when(service.readOwn(any(User.class), anyInt())).thenReturn(messages);
 
         Response response = resource.personalMessages(1L);

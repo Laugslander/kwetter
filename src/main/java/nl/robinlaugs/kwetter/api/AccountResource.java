@@ -52,7 +52,7 @@ public class AccountResource {
         try {
             service.create(account);
 
-            AccountDto dto = new AccountDto(service.read(account.getId()), true);
+            AccountDto dto = new AccountDto(account, true);
 
             return status(CREATED).entity(dto).build();
         } catch (Exception e) {
@@ -61,13 +61,12 @@ public class AccountResource {
     }
 
     @PATCH
+    @Path("{id}")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    public Response patchAccount(Account account) {
+    public Response patchAccount(@PathParam("id") Long id, Account update) {
         try {
-            service.update(account);
-
-            AccountDto dto = new AccountDto(service.read(account.getId()), true);
+            AccountDto dto = new AccountDto(service.update(id, update), true);
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {

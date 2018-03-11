@@ -57,7 +57,7 @@ public class MessageResource {
         try {
             messageService.create(message);
 
-            MessageDto dto = new MessageDto(messageService.read(message.getId()), true);
+            MessageDto dto = new MessageDto(message, true);
 
             return status(CREATED).entity(dto).build();
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class MessageResource {
             messageService.like(message, liker);
         }
 
-        MessageDto dto = new MessageDto(messageService.read(id), true);
+        MessageDto dto = new MessageDto(message, true);
 
         return status(OK).entity(dto).build();
     }
@@ -94,7 +94,7 @@ public class MessageResource {
             messageService.unlike(message, liker);
         }
 
-        MessageDto dto = new MessageDto(messageService.read(id), true);
+        MessageDto dto = new MessageDto(message, true);
 
         return status(OK).entity(dto).build();
     }

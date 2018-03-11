@@ -21,9 +21,7 @@ import java.util.Collection;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -74,7 +72,7 @@ public class MessageResourceTest {
         message.setId(1L);
         message.setAuthor(new User());
 
-        when(messageService.read(anyLong())).thenReturn(message);
+        when(messageService.read(1L)).thenReturn(message);
 
         Response response = resource.getMessage(1L);
 
@@ -85,16 +83,16 @@ public class MessageResourceTest {
     }
 
     @Test
-    public void postMessage_validMessage_postsAndReturnsMessage() {
+    public void postMessage_validMessage_postsAndReturnsMessage() throws Exception {
         Message message = new Message("text");
         message.setId(1L);
         message.setAuthor(new User());
 
-        when(messageService.read(anyLong())).thenReturn(message);
-
         Response response = resource.postMessage(message);
 
         MessageDto dto = (MessageDto) response.getEntity();
+
+        verify(messageService).create(message);
 
         assertThat(response.getStatus(), is(201));
         assertThat(dto.getText(), is("text"));
@@ -106,7 +104,7 @@ public class MessageResourceTest {
         message.setId(1L);
         message.setAuthor(new User());
 
-        doThrow(Exception.class).when(messageService).create(any(Message.class));
+        doThrow(Exception.class).when(messageService).create(message);
 
         Response response = resource.postMessage(message);
 
@@ -127,8 +125,8 @@ public class MessageResourceTest {
         user.setName("name");
         user.setAccount(new Account());
 
-        when(messageService.read(anyLong())).thenReturn(message);
-        when(userService.read(anyLong())).thenReturn(user);
+        when(messageService.read(1L)).thenReturn(message);
+        when(userService.read(2L)).thenReturn(user);
 
         Response response = resource.like(1L, 2L);
 
@@ -149,8 +147,8 @@ public class MessageResourceTest {
         user.setName("name");
         user.setAccount(new Account());
 
-        when(messageService.read(anyLong())).thenReturn(message);
-        when(userService.read(anyLong())).thenReturn(user);
+        when(messageService.read(1L)).thenReturn(message);
+        when(userService.read(2L)).thenReturn(user);
 
         Response response = resource.unlike(1L, 2L);
 
@@ -169,7 +167,7 @@ public class MessageResourceTest {
         Collection<Message> messages = new ArrayList<>();
         messages.add(message);
 
-        when(messageService.search(anyString())).thenReturn(messages);
+        when(messageService.search("text")).thenReturn(messages);
 
         Response response = resource.searchMessages("text");
 

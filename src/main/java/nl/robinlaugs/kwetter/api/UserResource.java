@@ -50,13 +50,12 @@ public class UserResource {
     }
 
     @PATCH
+    @Path("{id}")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    public Response patchUser(User user) {
+    public Response patchUser(@PathParam("id") Long id, User user) {
         try {
-            service.update(user);
-
-            UserDto dto = new UserDto(service.read(user.getId()), true);
+            UserDto dto = new UserDto(service.update(id, user), true);
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {

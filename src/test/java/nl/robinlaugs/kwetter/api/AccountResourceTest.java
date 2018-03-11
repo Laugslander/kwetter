@@ -18,10 +18,7 @@ import java.util.Collection;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -60,10 +57,9 @@ public class AccountResourceTest {
     @Test
     public void getAccount_validAccountId_getsAccount() {
         Account account = new Account();
-        account.setId(1L);
         account.setUsername("username");
 
-        when(service.read(anyLong())).thenReturn(account);
+        when(service.read(1L)).thenReturn(account);
 
         Response response = resource.getAccount(1L);
 
@@ -74,14 +70,13 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void postAccount_validAccount_postsAndReturnsAccount() {
+    public void postAccount_validAccount_postsAndReturnsAccount() throws Exception {
         Account account = new Account();
-        account.setId(1L);
         account.setUsername("username");
 
-        when(service.read(anyLong())).thenReturn(account);
-
         Response response = resource.postAccount(account);
+
+        verify(service).create(account);
 
         AccountDto dto = (AccountDto) response.getEntity();
 
@@ -92,10 +87,9 @@ public class AccountResourceTest {
     @Test
     public void postAccount_invalidAccount_returnsException() throws Exception {
         Account account = new Account();
-        account.setId(1L);
         account.setUsername("username");
 
-        doThrow(Exception.class).when(service).create(any(Account.class));
+        doThrow(Exception.class).when(service).create(account);
 
         Response response = resource.postAccount(account);
 
@@ -106,14 +100,13 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void patchAccount_validAccount_patchesAndReturnsAccount() {
+    public void patchAccount_validAccountIdAndUpdate_patchesAndReturnsAccount() throws Exception {
         Account account = new Account();
-        account.setId(1L);
         account.setUsername("username");
 
-        when(service.read(anyLong())).thenReturn(account);
+        when(service.update(1L, account)).thenReturn(account);
 
-        Response response = resource.patchAccount(account);
+        Response response = resource.patchAccount(1L, account);
 
         AccountDto dto = (AccountDto) response.getEntity();
 
@@ -122,14 +115,13 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void patchAccount_invalidAccount_returnsException() throws Exception {
+    public void patchAccount_invalidAccountIdOrUpdate_returnsException() throws Exception {
         Account account = new Account();
-        account.setId(1L);
         account.setUsername("username");
 
-        doThrow(Exception.class).when(service).update(any(Account.class));
+        doThrow(Exception.class).when(service).update(1L, account);
 
-        Response response = resource.patchAccount(account);
+        Response response = resource.patchAccount(1L, account);
 
         ExceptionDto dto = (ExceptionDto) response.getEntity();
 
