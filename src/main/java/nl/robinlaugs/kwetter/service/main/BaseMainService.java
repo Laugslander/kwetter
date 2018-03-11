@@ -13,13 +13,9 @@ public abstract class BaseMainService<T extends BaseEntity> {
 
     private GenericDao<T> dao;
 
-    public void create(T entity) throws Exception {
-        dao.create(entity);
-    }
+    public abstract void create(T entity) throws Exception;
 
-    public void update(T entity) throws Exception {
-        dao.update(entity);
-    }
+    public abstract T update(Long id, T update) throws Exception;
 
     public void delete(T entity) {
         dao.delete(entity);

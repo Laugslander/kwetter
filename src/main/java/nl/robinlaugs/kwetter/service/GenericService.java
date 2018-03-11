@@ -21,10 +21,12 @@ public interface GenericService<T extends BaseEntity> {
     /**
      * Updates an existing {@link BaseEntity}.
      *
-     * @param entity The existing {@link BaseEntity} that should be updated.
+     * @param id     The {@code id} of the existing {@link BaseEntity} that should be updated.
+     * @param update The {@link BaseEntity} that contains the updates.
+     * @return The {@link BaseEntity} that was updated.
      * @throws Exception When the {@code entity} violates input / uniqueness constraints.
      */
-    void update(T entity) throws Exception;
+    T update(Long id, T update) throws Exception;
 
     /**
      * Deletes an existing {@link BaseEntity}.

@@ -9,4 +9,16 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class BaseMainServiceTester extends BaseMainService<BaseEntityTester> {
+
+    @Override
+    public void create(BaseEntityTester entity) {
+        // Do nothing
+    }
+
+    @Override
+    public BaseEntityTester update(Long id, BaseEntityTester update) {
+        // Do nothing
+        return null;
+    }
+
 }

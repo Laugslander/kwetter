@@ -3,6 +3,8 @@ package nl.robinlaugs.kwetter.service.main;
 import nl.robinlaugs.kwetter.domain.Message;
 import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.exception.InputConstraintViolationException;
+import nl.robinlaugs.kwetter.exception.NullArgumentException;
+import nl.robinlaugs.kwetter.exception.UnknownEntityException;
 import nl.robinlaugs.kwetter.persistence.MessageDao;
 import nl.robinlaugs.kwetter.persistence.jpa.JpaDao;
 import nl.robinlaugs.kwetter.service.MessageService;
@@ -17,6 +19,8 @@ import javax.interceptor.Interceptors;
 import java.util.Collection;
 
 import static java.lang.String.format;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toSet;
 import static nl.robinlaugs.kwetter.domain.Message.MAX_TEXT_CHARACTERS;
 
@@ -39,17 +43,33 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
     @Interceptors({TextParsingInterceptor.class, MentionParsingInterceptor.class, TopicParsingInterceptor.class})
     public void create(Message message) throws Exception {
         String text = message.getText();
+        User author = message.getAuthor();
 
-        if (text.length() > MAX_TEXT_CHARACTERS) {
-            String exception = format("Maximum number of text characters(%d) exceeded.", MAX_TEXT_CHARACTERS);
-            throw new InputConstraintViolationException(exception);
-        }
+        if (isNull(text)) throw new NullArgumentException("Text cannot be null");
+        if (isNull(author)) throw new NullArgumentException("Author cannot be null");
+
+        checkMaxTextCharacters(text);
 
         message.getAuthor().getMessages().add(message);
         message.getMentions().forEach(m -> m.getMentioned().add(message));
         message.getTopics().forEach(t -> t.getMessages().add(message));
 
-        super.create(message);
+        dao.create(message);
+    }
+
+    @Override
+    public Message update(Long id, Message update) throws Exception {
+        Message message = dao.read(id);
+
+        if (isNull(message)) throw new UnknownEntityException(format("Message with id %d does not exist", id));
+
+        String text = message.getText();
+
+        checkMaxTextCharacters(text);
+
+        if (nonNull(text)) message.setText(text);
+
+        return dao.update(message);
     }
 
     @Override
@@ -74,6 +94,13 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
         user.getLiked().remove(message);
 
         dao.update(message);
+    }
+
+    private void checkMaxTextCharacters(String text) throws InputConstraintViolationException {
+        if (nonNull(text) && text.length() > MAX_TEXT_CHARACTERS) {
+            String exception = format("Maximum number of text characters(%d) exceeded.", MAX_TEXT_CHARACTERS);
+            throw new InputConstraintViolationException(exception);
+        }
     }
 
 }

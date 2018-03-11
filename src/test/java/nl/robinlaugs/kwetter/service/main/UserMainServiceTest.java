@@ -3,6 +3,7 @@ package nl.robinlaugs.kwetter.service.main;
 import nl.robinlaugs.kwetter.domain.Message;
 import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.exception.InputConstraintViolationException;
+import nl.robinlaugs.kwetter.exception.UnknownEntityException;
 import nl.robinlaugs.kwetter.persistence.UserDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,8 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -41,13 +44,51 @@ public class UserMainServiceTest {
         initMocks(this);
     }
 
-    @Test(expected = InputConstraintViolationException.class)
-    public void update_tooLongBio_callsDao() throws Exception {
-        String bio = new String(new char[MAX_BIO_CHARACTERS + 1]).replace("\0", "a");
+    @Test
+    public void create_validAccount_callsDao() throws Exception {
         User user = new User();
-        user.setBio(bio);
 
-        service.update(user);
+        service.create(user);
+
+        verify(dao).create(user);
+    }
+
+    @Test(expected = InputConstraintViolationException.class)
+    public void create_tooLongUserBio_throwsException() throws Exception {
+        User user = new User();
+        user.setBio(new String(new char[MAX_BIO_CHARACTERS + 1]).replace("\0", "a"));
+
+        service.create(user);
+    }
+
+    @Test
+    public void update_validUserIdAndUpdate_callsDao() throws Exception {
+        User user = new User();
+
+        when(dao.read(1L)).thenReturn(user);
+
+        service.update(1L, user);
+
+        verify(dao).update(user);
+    }
+
+    @Test(expected = UnknownEntityException.class)
+    public void update_unknownUserId_throwsException() throws Exception {
+        User user = new User();
+
+        when(dao.read(1L)).thenReturn(null);
+
+        service.update(1L, user);
+    }
+
+    @Test(expected = InputConstraintViolationException.class)
+    public void update_tooLongUserBio_throwsException() throws Exception {
+        User user = new User();
+        user.setBio(new String(new char[MAX_BIO_CHARACTERS + 1]).replace("\0", "a"));
+
+        when(dao.read(1L)).thenReturn(user);
+
+        service.update(1L, user);
     }
 
     @Test

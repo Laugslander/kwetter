@@ -16,7 +16,6 @@ import static java.time.LocalDateTime.now;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -37,30 +36,12 @@ public class BaseMainServiceTest {
     }
 
     @Test
-    public void create_validEntity_callsDao() throws Exception {
-        BaseEntityTester entity = new BaseEntityTester();
-
-        service.create(entity);
-
-        verify(dao, times(1)).create(entity);
-    }
-
-    @Test
-    public void update_validEntity_callsDao() throws Exception {
-        BaseEntityTester entity = new BaseEntityTester();
-
-        service.update(entity);
-
-        verify(dao, times(1)).update(entity);
-    }
-
-    @Test
     public void delete_validEntity_callsDao() {
         BaseEntityTester entity = new BaseEntityTester();
 
         service.delete(entity);
 
-        verify(dao, times(1)).delete(entity);
+        verify(dao).delete(entity);
     }
 
     @Test
@@ -69,7 +50,7 @@ public class BaseMainServiceTest {
 
         service.delete(id);
 
-        verify(dao, times(1)).delete(id);
+        verify(dao).delete(id);
     }
 
     @Test
@@ -78,14 +59,14 @@ public class BaseMainServiceTest {
 
         service.read(id);
 
-        verify(dao, times(1)).read(id);
+        verify(dao).read(id);
     }
 
     @Test
     public void readAll_callsDao() {
         service.readAll();
 
-        verify(dao, times(1)).readAll();
+        verify(dao).readAll();
     }
 
     @Test
@@ -94,7 +75,7 @@ public class BaseMainServiceTest {
 
         service.readFromTimestamp(timestamp);
 
-        verify(dao, times(1)).readFromTimestamp(timestamp);
+        verify(dao).readFromTimestamp(timestamp);
     }
 
     @Test

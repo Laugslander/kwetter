@@ -1,6 +1,8 @@
 package nl.robinlaugs.kwetter.service.main;
 
 import nl.robinlaugs.kwetter.domain.Topic;
+import nl.robinlaugs.kwetter.exception.NullArgumentException;
+import nl.robinlaugs.kwetter.exception.UnknownEntityException;
 import nl.robinlaugs.kwetter.persistence.TopicDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +21,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -40,6 +43,40 @@ public class TopicMainServiceTest {
     }
 
     @Test
+    public void create_validTopic_callsDao() throws Exception {
+        Topic topic = new Topic("name");
+
+        service.create(topic);
+
+        verify(dao).create(topic);
+    }
+
+    @Test(expected = NullArgumentException.class)
+    public void create_nullTopicName_throwsException() throws Exception {
+        Topic topic = new Topic();
+
+        service.create(topic);
+    }
+
+    @Test
+    public void update_validTopicIdAndUpdate_callsDao() throws Exception {
+        Topic topic = new Topic();
+
+        when(dao.read(1L)).thenReturn(topic);
+
+        service.update(1L, topic);
+    }
+
+    @Test(expected = UnknownEntityException.class)
+    public void update_unknownTopicId_throwsException() throws Exception {
+        Topic topic = new Topic();
+
+        when(dao.read(1L)).thenReturn(null);
+
+        service.update(1L, topic);
+    }
+
+    @Test
     public void read_validName_callsDao() {
         Topic topic = new Topic();
         topic.setName("name");
@@ -48,7 +85,7 @@ public class TopicMainServiceTest {
 
         service.read("name");
 
-        verify(dao, times(1)).readByName("name");
+        verify(dao).readByName("name");
     }
 
     @Test

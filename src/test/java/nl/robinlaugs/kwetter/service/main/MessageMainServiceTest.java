@@ -3,6 +3,8 @@ package nl.robinlaugs.kwetter.service.main;
 import nl.robinlaugs.kwetter.domain.Message;
 import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.exception.InputConstraintViolationException;
+import nl.robinlaugs.kwetter.exception.NullArgumentException;
+import nl.robinlaugs.kwetter.exception.UnknownEntityException;
 import nl.robinlaugs.kwetter.persistence.MessageDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -43,13 +46,67 @@ public class MessageMainServiceTest {
         initMocks(this);
     }
 
-    @Test(expected = InputConstraintViolationException.class)
-    public void create_tooLongText_throwsException() throws Exception {
-        String text = new String(new char[MAX_TEXT_CHARACTERS + 1]).replace("\0", "a");
-        Message message = new Message();
-        message.setText(text);
+    @Test
+    public void create_validMessage_callsDao() throws Exception {
+        Message message = new Message("text");
+        message.setAuthor(new User());
 
         service.create(message);
+    }
+
+    @Test(expected = NullArgumentException.class)
+    public void create_nullMessageText_throwsException() throws Exception {
+        Message message = new Message();
+        message.setAuthor(new User());
+
+        service.create(message);
+    }
+
+    @Test
+    public void create_nullMessageAuthor_throwsException() throws Exception {
+        Message message = new Message("text");
+        message.setAuthor(new User());
+
+        service.create(message);
+    }
+
+    @Test(expected = InputConstraintViolationException.class)
+    public void create_tooLongMessageText_throwsException() throws Exception {
+        Message message = new Message();
+        message.setText(new String(new char[MAX_TEXT_CHARACTERS + 1]).replace("\0", "a"));
+        message.setAuthor(new User());
+
+        service.create(message);
+    }
+
+    @Test
+    public void update_validMessageIdAndUpdate_callsDao() throws Exception {
+        Message message = new Message();
+
+        when(dao.read(1L)).thenReturn(message);
+
+        service.update(1L, message);
+
+        verify(dao).update(message);
+    }
+
+    @Test(expected = UnknownEntityException.class)
+    public void update_unknownMessageId_throwsException() throws Exception {
+        Message message = new Message();
+
+        when(dao.read(1L)).thenReturn(null);
+
+        service.update(1L, message);
+    }
+
+    @Test(expected = InputConstraintViolationException.class)
+    public void update_tooLongMessageText_throwsException() throws Exception {
+        Message message = new Message();
+        message.setText(new String(new char[MAX_TEXT_CHARACTERS + 1]).replace("\0", "a"));
+
+        when(dao.read(1L)).thenReturn(message);
+
+        service.update(1L, message);
     }
 
     @Test
