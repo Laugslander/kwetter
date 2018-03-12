@@ -55,7 +55,7 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void getAccount_validAccountId_getsAccount() {
+    public void getAccount_validAccountId_getsAccount() throws Exception {
         Account account = new Account();
         account.setUsername("username");
 
@@ -67,6 +67,18 @@ public class AccountResourceTest {
 
         assertThat(response.getStatus(), is(200));
         assertThat(dto.getUsername(), is("username"));
+    }
+
+    @Test
+    public void getAccount_unknownAccountId_returnsException() throws Exception {
+        doThrow(Exception.class).when(service).read(1L);
+
+        Response response = resource.getAccount(1L);
+
+        ExceptionDto dto = (ExceptionDto) response.getEntity();
+
+        assertThat(response.getStatus(), is(400));
+        assertThat(dto, instanceOf(ExceptionDto.class));
     }
 
     @Test

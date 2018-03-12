@@ -92,6 +92,24 @@ public class UserMainServiceTest {
     }
 
     @Test
+    public void read_validUserId_callsDao() throws Exception {
+        User user = new User();
+
+        when(dao.read(1L)).thenReturn(user);
+
+        service.read(1L);
+
+        verify(dao).read(1L);
+    }
+
+    @Test(expected = UnknownEntityException.class)
+    public void read_unknownUserId_callsDao() throws Exception {
+        when(dao.read(1L)).thenReturn(null);
+
+        service.read(1L);
+    }
+
+    @Test
     public void readAll_validUser_readsAllMessages() {
         LocalDateTime timestamp1 = of(2018, JANUARY, 1, 0, 0);
         Message message1 = new Message();

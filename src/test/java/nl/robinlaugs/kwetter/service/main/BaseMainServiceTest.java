@@ -54,15 +54,6 @@ public class BaseMainServiceTest {
     }
 
     @Test
-    public void read_validId_callsDao() {
-        Long id = 1L;
-
-        service.read(id);
-
-        verify(dao).read(id);
-    }
-
-    @Test
     public void readAll_callsDao() {
         service.readAll();
 

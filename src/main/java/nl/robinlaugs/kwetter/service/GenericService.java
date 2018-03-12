@@ -2,13 +2,14 @@ package nl.robinlaugs.kwetter.service;
 
 import nl.robinlaugs.kwetter.domain.BaseEntity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 /**
  * @author Robin Laugs
  */
-public interface GenericService<T extends BaseEntity> {
+public interface GenericService<T extends BaseEntity> extends Serializable {
 
     /**
      * Persists a {@link BaseEntity}.
@@ -47,8 +48,9 @@ public interface GenericService<T extends BaseEntity> {
      *
      * @param id The {@code id} of the existing {@link BaseEntity} that should be read.
      * @return The {@link BaseEntity} that was read.
+     * @throws Exception When the {@code entity} was not found.
      */
-    T read(Long id);
+    T read(Long id) throws Exception;
 
     /**
      * Reads all existing {@link BaseEntity BaseEntities}.

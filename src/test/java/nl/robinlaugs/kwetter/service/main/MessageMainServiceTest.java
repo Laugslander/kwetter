@@ -110,6 +110,24 @@ public class MessageMainServiceTest {
     }
 
     @Test
+    public void read_validMessageId_callsDao() throws Exception {
+        Message message = new Message();
+
+        when(dao.read(1L)).thenReturn(message);
+
+        service.read(1L);
+
+        verify(dao).read(1L);
+    }
+
+    @Test(expected = UnknownEntityException.class)
+    public void read_unknownMessageId_callsDao() throws Exception {
+        when(dao.read(1L)).thenReturn(null);
+
+        service.read(1L);
+    }
+
+    @Test
     public void search_existingMessageText_returnsCorrespondingMessages() {
         LocalDateTime timestamp1 = of(2018, JANUARY, 1, 0, 0);
         Message message1 = new Message();

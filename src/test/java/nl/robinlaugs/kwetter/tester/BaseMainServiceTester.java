@@ -18,6 +18,14 @@ public class BaseMainServiceTester extends BaseMainService<BaseEntityTester> {
     @Override
     public BaseEntityTester update(Long id, BaseEntityTester update) {
         // Do nothing
+
+        return null;
+    }
+
+    @Override
+    public BaseEntityTester read(Long id) {
+        // Do nothing
+
         return null;
     }
 

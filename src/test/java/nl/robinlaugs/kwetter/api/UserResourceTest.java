@@ -66,7 +66,7 @@ public class UserResourceTest {
     }
 
     @Test
-    public void getUser_validUserId_getsUser() {
+    public void getUser_validUserId_getsUser() throws Exception {
         User user = new User();
         user.setName("name");
         user.setAccount(new Account());
@@ -79,6 +79,18 @@ public class UserResourceTest {
 
         assertThat(response.getStatus(), is(200));
         assertThat(dto.getName(), is("name"));
+    }
+
+    @Test
+    public void getUser_unknownAccountId_returnsException() throws Exception {
+        doThrow(Exception.class).when(service).read(1L);
+
+        Response response = resource.getUser(1L);
+
+        ExceptionDto dto = (ExceptionDto) response.getEntity();
+
+        assertThat(response.getStatus(), is(400));
+        assertThat(dto, instanceOf(ExceptionDto.class));
     }
 
     @Test
@@ -114,7 +126,7 @@ public class UserResourceTest {
     }
 
     @Test
-    public void follow_validUserIdAndFollowerUserId_followersFollowsUser() {
+    public void follow_validUserIdAndFollowerUserId_followersFollowsUser() throws Exception {
         User user1 = new User();
         user1.setId(1L);
         user1.setName("name1");
@@ -136,7 +148,7 @@ public class UserResourceTest {
     }
 
     @Test
-    public void unfollow_validUserIdAndFollowerUserId_unfollowerUnfollowersUser() {
+    public void unfollow_validUserIdAndFollowerUserId_unfollowerUnfollowersUser() throws Exception {
         User user1 = new User();
         user1.setId(1L);
         user1.setName("name1");
@@ -158,7 +170,7 @@ public class UserResourceTest {
     }
 
     @Test
-    public void timelineMessages_validUserId_getsTimelineMessages() {
+    public void timelineMessages_validUserId_getsTimelineMessages() throws Exception {
         User user = new User();
         user.setId(1L);
         user.setAccount(new Account());
@@ -185,7 +197,7 @@ public class UserResourceTest {
     }
 
     @Test
-    public void personalMessages_validUserId_getsPeronalMessages() {
+    public void personalMessages_validUserId_getsPeronalMessages() throws Exception {
         User user1 = new User();
         user1.setId(1L);
         user1.setAccount(new Account());

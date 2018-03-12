@@ -67,7 +67,7 @@ public class MessageResourceTest {
     }
 
     @Test
-    public void getMessage_validMessageId_getsMessage() {
+    public void getMessage_validMessageId_getsMessage() throws Exception {
         Message message = new Message("text");
         message.setId(1L);
         message.setAuthor(new User());
@@ -80,6 +80,18 @@ public class MessageResourceTest {
 
         assertThat(response.getStatus(), is(200));
         assertThat(dto.getText(), is("text"));
+    }
+
+    @Test
+    public void getMessage_unknownAccountId_returnsException() throws Exception {
+        doThrow(Exception.class).when(messageService).read(1L);
+
+        Response response = resource.getMessage(1L);
+
+        ExceptionDto dto = (ExceptionDto) response.getEntity();
+
+        assertThat(response.getStatus(), is(400));
+        assertThat(dto, instanceOf(ExceptionDto.class));
     }
 
     @Test
@@ -115,7 +127,7 @@ public class MessageResourceTest {
     }
 
     @Test
-    public void like_validMessageIdAndUserId_UserLikesMessage() {
+    public void like_validMessageIdAndUserId_UserLikesMessage() throws Exception {
         Message message = new Message("text");
         message.setId(1L);
         message.setAuthor(new User());
@@ -137,7 +149,7 @@ public class MessageResourceTest {
     }
 
     @Test
-    public void unlike_validMessageIdAndUserId_UsersUnlikesMessage() {
+    public void unlike_validMessageIdAndUserId_UsersUnlikesMessage() throws Exception {
         Message message = new Message("text");
         message.setId(1L);
         message.setAuthor(new User());

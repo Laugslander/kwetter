@@ -25,9 +25,7 @@ public abstract class BaseMainService<T extends BaseEntity> {
         dao.delete(id);
     }
 
-    public T read(Long id) {
-        return dao.read(id);
-    }
+    public abstract T read(Long id) throws Exception;
 
     public Collection<T> readAll() {
         return dao.readAll();

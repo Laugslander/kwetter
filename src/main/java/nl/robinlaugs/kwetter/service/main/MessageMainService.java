@@ -73,6 +73,15 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
     }
 
     @Override
+    public Message read(Long id) throws Exception {
+        Message message = dao.read(id);
+
+        if (isNull(message)) throw new UnknownEntityException(format("Message with id %d does not exist", id));
+
+        return message;
+    }
+
+    @Override
     public Collection<Message> search(String text) {
         return dao.readAll().stream()
                 .filter(m -> m.getText().toLowerCase().contains(text.toLowerCase()))

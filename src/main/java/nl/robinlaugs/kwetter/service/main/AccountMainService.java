@@ -13,10 +13,12 @@ import nl.robinlaugs.kwetter.service.AccountService;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.Collection;
 
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * @author Robin Laugs
@@ -68,6 +70,15 @@ public class AccountMainService extends BaseMainService<Account> implements Acco
     }
 
     @Override
+    public Account read(Long id) throws Exception {
+        Account account = dao.read(id);
+
+        if (isNull(account)) throw new UnknownEntityException(format("Account with id %d does not exist", id));
+
+        return account;
+    }
+
+    @Override
     public Account read(String username) {
         return dao.readByUsername(username);
     }
@@ -79,6 +90,20 @@ public class AccountMainService extends BaseMainService<Account> implements Acco
         if (isNull(account)) throw new InvalidCredentialsException();
 
         return account;
+    }
+
+    @Override
+    public Collection<Account> search(String text) {
+        return dao.readAll().stream()
+                .filter(a -> contains(a.getUsername(), text) ||
+                        contains(a.getRole().toString(), text) ||
+                        contains(a.getUser().getName(), text))
+                .sorted()
+                .collect(toSet());
+    }
+
+    private boolean contains(String text, String matcher) {
+        return text.toLowerCase().contains(matcher.toLowerCase());
     }
 
 }

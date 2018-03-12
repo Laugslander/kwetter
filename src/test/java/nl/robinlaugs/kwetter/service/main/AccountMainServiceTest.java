@@ -72,7 +72,7 @@ public class AccountMainServiceTest {
     public void update_validAccountIdAndUpdate_callsDao() throws Exception {
         Account account = new Account("username", "password");
 
-        when(service.read(1L)).thenReturn(account);
+        when(dao.read(1L)).thenReturn(account);
 
         service.update(1L, account);
 
@@ -96,6 +96,24 @@ public class AccountMainServiceTest {
         when(dao.readByUsername("username")).thenReturn(account);
 
         service.update(1L, account);
+    }
+
+    @Test
+    public void read_validAccountId_callsDao() throws Exception {
+        Account account = new Account("username", "password");
+
+        when(dao.read(1L)).thenReturn(account);
+
+        service.read(1L);
+
+        verify(dao).read(1L);
+    }
+
+    @Test(expected = UnknownEntityException.class)
+    public void read_unknownAccountId_callsDao() throws Exception {
+        when(dao.read(1L)).thenReturn(null);
+
+        service.read(1L);
     }
 
     @Test

@@ -66,6 +66,15 @@ public class UserMainService extends BaseMainService<User> implements UserServic
     }
 
     @Override
+    public User read(Long id) throws Exception {
+        User user = dao.read(id);
+
+        if (isNull(user)) throw new UnknownEntityException(format("User with id %d does not exist", id));
+
+        return user;
+    }
+
+    @Override
     public Collection<Message> readAll(User user) {
         Collection<Message> messages = new TreeSet<>(user.getMessages());
         user.getFollowings().forEach(f -> messages.addAll(f.getMessages()));

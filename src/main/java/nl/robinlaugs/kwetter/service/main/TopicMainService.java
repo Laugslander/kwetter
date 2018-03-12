@@ -56,6 +56,15 @@ public class TopicMainService extends BaseMainService<Topic> implements TopicSer
     }
 
     @Override
+    public Topic read(Long id) throws Exception {
+        Topic topic = dao.read(id);
+
+        if (isNull(topic)) throw new UnknownEntityException(format("Topic with id %d does not exist", id));
+
+        return topic;
+    }
+
+    @Override
     public Topic read(String name) {
         return dao.readByName(name);
     }

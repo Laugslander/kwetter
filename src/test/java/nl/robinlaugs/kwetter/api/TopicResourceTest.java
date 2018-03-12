@@ -1,5 +1,6 @@
 package nl.robinlaugs.kwetter.api;
 
+import nl.robinlaugs.kwetter.api.dto.ExceptionDto;
 import nl.robinlaugs.kwetter.api.dto.TopicDto;
 import nl.robinlaugs.kwetter.domain.Topic;
 import nl.robinlaugs.kwetter.service.TopicService;
@@ -15,10 +16,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -56,7 +59,7 @@ public class TopicResourceTest {
     }
 
     @Test
-    public void getMessage_validMessageId_getsMessage() {
+    public void getTopic_validMessageId_getsMessage() throws Exception {
         Topic topic = new Topic("name");
         topic.setId(1L);
 
@@ -69,6 +72,19 @@ public class TopicResourceTest {
         assertThat(response.getStatus(), is(200));
         assertThat(dto.getName(), is("name"));
     }
+
+    @Test
+    public void getTopic_unknownAccountId_returnsException() throws Exception {
+        doThrow(Exception.class).when(service).read(1L);
+
+        Response response = resource.getTopic(1L);
+
+        ExceptionDto dto = (ExceptionDto) response.getEntity();
+
+        assertThat(response.getStatus(), is(400));
+        assertThat(dto, instanceOf(ExceptionDto.class));
+    }
+
 
     @Test
     public void trending_getsTrendingTopics() {
@@ -85,6 +101,5 @@ public class TopicResourceTest {
         assertThat(response.getStatus(), is(200));
         assertThat(dto.size(), is(2));
     }
-
 
 }

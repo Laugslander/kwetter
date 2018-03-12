@@ -77,9 +77,26 @@ public class TopicMainServiceTest {
     }
 
     @Test
-    public void read_validName_callsDao() {
+    public void read_validTopicId_callsDao() throws Exception {
         Topic topic = new Topic();
-        topic.setName("name");
+
+        when(dao.read(1L)).thenReturn(topic);
+
+        service.read(1L);
+
+        verify(dao).read(1L);
+    }
+
+    @Test(expected = UnknownEntityException.class)
+    public void read_unknownTopicId_callsDao() throws Exception {
+        when(dao.read(1L)).thenReturn(null);
+
+        service.read(1L);
+    }
+
+    @Test
+    public void read_validName_callsDao() {
+        Topic topic = new Topic("name");
 
         when(dao.readByName("name")).thenReturn(topic);
 

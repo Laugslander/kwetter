@@ -1,7 +1,6 @@
 package nl.robinlaugs.kwetter.api;
 
 import nl.robinlaugs.kwetter.api.dto.AccountDto;
-import nl.robinlaugs.kwetter.api.dto.ExceptionDto;
 import nl.robinlaugs.kwetter.domain.Account;
 import nl.robinlaugs.kwetter.service.AccountService;
 
@@ -13,7 +12,8 @@ import java.util.Collection;
 
 import static java.util.stream.Collectors.toSet;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.status;
 
 /**
@@ -21,7 +21,7 @@ import static javax.ws.rs.core.Response.status;
  */
 @Stateless
 @Path("accounts")
-public class AccountResource {
+public class AccountResource extends BaseResource {
 
     @Inject
     private AccountService service;
@@ -40,9 +40,13 @@ public class AccountResource {
     @Path("{id}")
     @Produces(APPLICATION_JSON)
     public Response getAccount(@PathParam("id") Long id) {
-        AccountDto dto = new AccountDto(service.read(id), true);
+        try {
+            AccountDto dto = new AccountDto(service.read(id), true);
 
-        return status(OK).entity(dto).build();
+            return status(OK).entity(dto).build();
+        } catch (Exception e) {
+            return exceptionDto(e);
+        }
     }
 
     @POST
@@ -56,7 +60,7 @@ public class AccountResource {
 
             return status(CREATED).entity(dto).build();
         } catch (Exception e) {
-            return status(BAD_REQUEST).entity(new ExceptionDto(e)).build();
+            return exceptionDto(e);
         }
     }
 
@@ -70,9 +74,7 @@ public class AccountResource {
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {
-            ExceptionDto dto = new ExceptionDto(e);
-
-            return status(BAD_REQUEST).entity(dto).build();
+            return exceptionDto(e);
         }
     }
 

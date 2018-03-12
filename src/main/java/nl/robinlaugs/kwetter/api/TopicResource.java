@@ -23,7 +23,7 @@ import static javax.ws.rs.core.Response.status;
  */
 @Stateless
 @Path("topics")
-public class TopicResource {
+public class TopicResource extends BaseResource {
 
     private static final int NUMBER_OF_TRENDING_TOPICS = 10;
 
@@ -44,9 +44,13 @@ public class TopicResource {
     @Path("{id}")
     @Produces(APPLICATION_JSON)
     public Response getTopic(@PathParam("id") Long id) {
-        TopicDto dto = new TopicDto(service.read(id), true);
+        try {
+            TopicDto dto = new TopicDto(service.read(id), true);
 
-        return status(OK).entity(dto).build();
+            return status(OK).entity(dto).build();
+        } catch (Exception e) {
+            return exceptionDto(e);
+        }
     }
 
     @GET

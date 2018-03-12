@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import static java.time.LocalDateTime.of;
 import static java.time.Month.JANUARY;
 import static java.util.logging.Level.WARNING;
+import static nl.robinlaugs.kwetter.domain.Role.ADMINISTRATOR;
 
 /**
  * @author Robin Laugs
@@ -35,6 +36,8 @@ public class TestDataService {
     private void setUp() {
         try {
             Account account1 = new Account("Laugslander", "welkom");
+            account1.setRole(ADMINISTRATOR);
+
             Account account2 = new Account("bras1223", "welkom");
 
             accountService.create(account1);
@@ -61,7 +64,7 @@ public class TestDataService {
             Message message2 = new Message();
             message2.setText("@Laugslander #kwetter is inderdaad #super");
             message2.setAuthor(user2);
-            message1.setTimestamp(of(2018, JANUARY, 2, 0, 0));
+            message2.setTimestamp(of(2018, JANUARY, 2, 0, 0));
 
             messageService.create(message1);
             messageService.create(message2);
