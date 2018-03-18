@@ -4,15 +4,13 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <ui:define name="title">#{i18n['account.index.title']}</ui:define>
-
     <ui:param name="bean" value="#{accountIndexBean}"/>
     <ui:param name="entity" value="accounts"/>
 
+    <ui:define name="title">#{i18n['account.index.title']}</ui:define>
+
     <ui:define name="body">
-        <h1>
-            <h:outputText value="#{i18n['account.index.title']}"/>
-        </h1>
+        <h1><h:outputText value="#{i18n['account.index.title']}"/></h1>
 
         <h:panelGroup id="accounts">
             <h:form styleClass="well">
