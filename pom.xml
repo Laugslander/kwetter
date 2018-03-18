@@ -60,6 +60,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- user interface framework -->
+        <dependency>
+            <groupId>net.bootsfaces</groupId>
+            <artifactId>bootsfaces</artifactId>
+            <version>1.2.0</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- unit test framework -->
         <dependency>
             <groupId>junit</groupId>

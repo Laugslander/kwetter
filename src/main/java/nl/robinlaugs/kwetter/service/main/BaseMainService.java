@@ -6,6 +6,8 @@ import nl.robinlaugs.kwetter.persistence.GenericDao;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * @author Robin Laugs
  */
@@ -28,11 +30,11 @@ public abstract class BaseMainService<T extends BaseEntity> {
     public abstract T read(Long id) throws Exception;
 
     public Collection<T> readAll() {
-        return dao.readAll();
+        return dao.readAll().stream().sorted().collect(toList());
     }
 
     public Collection<T> readFromTimestamp(LocalDateTime timestamp) {
-        return dao.readFromTimestamp(timestamp);
+        return dao.readFromTimestamp(timestamp).stream().sorted().collect(toList());
     }
 
     public GenericDao<T> getDao() {

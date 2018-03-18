@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:b="http://bootsfaces.net/ui">
+
+<ui:composition>
+    <div class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <h:outputLink styleClass="navbar-brand" value="#{request.contextPath}/admin/account">
+                    #{i18n['title']}
+                </h:outputLink>
+            </div>
+            <div class="nav navbar-nav">
+                <li>
+                    <h:outputLink value="#{request.contextPath}/admin/account">
+                        #{i18n['account.index.title']}
+                    </h:outputLink>
+                </li>
+                <li>
+                    <h:outputLink value="#{request.contextPath}/admin/message">
+                        #{i18n['message.index.title']}
+                    </h:outputLink>
+                </li>
+            </div>
+            <h:form styleClass="navbar-form navbar-right">
+                <b:selectOneMenu value="#{localeBean.language}" onchange="submit()">
+                    <f:selectItem itemValue="en" itemLabel="English"/>
+                    <f:selectItem itemValue="nl" itemLabel="Nederlands"/>
+                </b:selectOneMenu>
+                <h:outputText value="&#160;"/>
+
+                <h:inputText value="#{bean.filter}" id="filter" styleClass="form-control"
+                             a:placeholder="#{i18n['search']} #{i18n[entity]}" rendered="#{not empty entity}">
+                    <f:ajax event="keyup" execute="filter" render="#{entity}"/>
+                </h:inputText>
+            </h:form>
+        </div>
+    </div>
+</ui:composition>
+
+</html>

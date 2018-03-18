@@ -18,7 +18,7 @@ import java.util.Collection;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Robin Laugs
@@ -99,7 +99,7 @@ public class AccountMainService extends BaseMainService<Account> implements Acco
                         contains(a.getRole().toString(), text) ||
                         contains(a.getUser().getName(), text))
                 .sorted()
-                .collect(toSet());
+                .collect(toList());
     }
 
     private boolean contains(String text, String matcher) {

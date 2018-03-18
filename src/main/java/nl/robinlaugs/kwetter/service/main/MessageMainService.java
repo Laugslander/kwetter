@@ -21,7 +21,7 @@ import java.util.Collection;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 import static nl.robinlaugs.kwetter.domain.Message.MAX_TEXT_CHARACTERS;
 
 /**
@@ -86,7 +86,7 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
         return dao.readAll().stream()
                 .filter(m -> m.getText().toLowerCase().contains(text.toLowerCase()))
                 .sorted()
-                .collect(toSet());
+                .collect(toList());
     }
 
     @Override
