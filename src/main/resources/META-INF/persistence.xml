@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="kwetter_development">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <jta-data-source>jdbc/kwetter_resource</jta-data-source>
+        <class>nl.robinlaugs.kwetter.domain.BaseEntity</class>
+        <class>nl.robinlaugs.kwetter.domain.Account</class>
+        <class>nl.robinlaugs.kwetter.domain.User</class>
+        <class>nl.robinlaugs.kwetter.domain.Message</class>
+        <class>nl.robinlaugs.kwetter.domain.Topic</class>
+
+        <properties>
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+        </properties>
+    </persistence-unit>
+</persistence>
