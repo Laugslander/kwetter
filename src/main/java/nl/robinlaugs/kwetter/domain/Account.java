@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.STRING;
 import static nl.robinlaugs.kwetter.domain.Role.USER;
 
 /**
@@ -31,7 +32,7 @@ public class Account extends BaseEntity {
     @NonNull
     private String password;
 
-    @Enumerated
+    @Enumerated(STRING)
     @NonNull
     private Role role = USER;
 

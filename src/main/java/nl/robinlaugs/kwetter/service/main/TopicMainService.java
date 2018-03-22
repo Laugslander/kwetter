@@ -37,7 +37,7 @@ public class TopicMainService extends BaseMainService<Topic> implements TopicSer
     public void create(Topic topic) throws Exception {
         String name = topic.getName();
 
-        if (isNull(name)) throw new NullArgumentException("Name cannot be null");
+        if (isNull(name) || name.isEmpty()) throw new NullArgumentException("Name cannot be empty");
 
         dao.create(topic);
     }

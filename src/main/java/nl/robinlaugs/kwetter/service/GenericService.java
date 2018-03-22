@@ -2,14 +2,13 @@ package nl.robinlaugs.kwetter.service;
 
 import nl.robinlaugs.kwetter.domain.BaseEntity;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 /**
  * @author Robin Laugs
  */
-public interface GenericService<T extends BaseEntity> extends Serializable {
+public interface GenericService<T extends BaseEntity> {
 
     /**
      * Persists a {@link BaseEntity}.

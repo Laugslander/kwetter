@@ -1,6 +1,7 @@
 package nl.robinlaugs.kwetter.bean;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -18,6 +19,7 @@ import static javax.faces.context.FacesContext.getCurrentInstance;
 public class LocaleBean implements Serializable {
 
     @Getter
+    @Setter
     private Locale locale;
 
     @PostConstruct

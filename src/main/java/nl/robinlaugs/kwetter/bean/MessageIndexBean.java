@@ -8,7 +8,6 @@ import nl.robinlaugs.kwetter.service.MessageService;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
 import java.util.Collection;
 
 import static java.util.Objects.nonNull;
@@ -18,7 +17,7 @@ import static java.util.Objects.nonNull;
  */
 @Named(value = "messageIndexBean")
 @RequestScoped
-public class MessageIndexBean implements Serializable {
+public class MessageIndexBean {
 
     @Inject
     private MessageService service;

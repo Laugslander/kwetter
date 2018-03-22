@@ -40,8 +40,8 @@ public class AccountMainService extends BaseMainService<Account> implements Acco
         String username = account.getUsername();
         String password = account.getPassword();
 
-        if (isNull(username)) throw new NullArgumentException("Username cannot be null");
-        if (isNull(password)) throw new NullArgumentException("Password cannot be null");
+        if (isNull(username) || username.isEmpty()) throw new NullArgumentException("Username cannot be empty");
+        if (isNull(password) || password.isEmpty()) throw new NullArgumentException("Password cannot be empty");
 
         if (nonNull(dao.readByUsername(username))) throw new DuplicateUsernameException();
 
@@ -97,6 +97,7 @@ public class AccountMainService extends BaseMainService<Account> implements Acco
         return dao.readAll().stream()
                 .filter(a -> contains(a.getUsername(), text) ||
                         contains(a.getRole().toString(), text) ||
+                        contains(a.getTimestamp().toString(), text) ||
                         contains(a.getUser().getName(), text))
                 .sorted()
                 .collect(toList());

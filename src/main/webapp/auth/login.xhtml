@@ -1,0 +1,21 @@
+<ui:composition template="../admin/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:define name="title">#{i18n['login.title']}</ui:define>
+
+    <ui:define name="body">
+        <form class="form-signin" method="post" action="j_security_check">
+            <h1><h:outputText styleClass="form-heading" value="#{i18n['login.title']}"/></h1>
+
+            <input name="j_username" class="form-control" placeholder="#{i18n['username']}"/>
+
+            <input type="password" name="j_password" class="form-control" placeholder="#{i18n['password']}"/>
+
+            <input type="submit" value="#{i18n['button.login']}" class="btn btn-primary btn-lg form-control"/>
+
+            <h:messages globalOnly="true" styleClass="alert alert-danger form-control aform-error"/>
+        </form>
+    </ui:define>
+</ui:composition>

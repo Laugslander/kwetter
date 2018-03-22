@@ -23,4 +23,50 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
 
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
+    </context-param>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Administrator section</web-resource-name>
+            <url-pattern>/admin/account/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Administrator</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Moderator section</web-resource-name>
+            <url-pattern>/admin/message/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Administrator</role-name>
+            <role-name>Moderator</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>kwetter_realm</realm-name>
+        <form-login-config>
+            <form-login-page>/auth/login.xhtml</form-login-page>
+            <form-error-page>/auth/error.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+
+    <security-role>
+        <role-name>User</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>Moderator</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>Administrator</role-name>
+    </security-role>
 </web-app>

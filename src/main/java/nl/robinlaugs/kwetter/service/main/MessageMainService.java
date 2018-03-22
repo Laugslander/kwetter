@@ -45,7 +45,7 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
         String text = message.getText();
         User author = message.getAuthor();
 
-        if (isNull(text)) throw new NullArgumentException("Text cannot be null");
+        if (isNull(text) || text.isEmpty()) throw new NullArgumentException("Text cannot be empty");
         if (isNull(author)) throw new NullArgumentException("Author cannot be null");
 
         checkMaxTextCharacters(text);

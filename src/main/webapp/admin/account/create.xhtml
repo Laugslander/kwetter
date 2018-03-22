@@ -1,0 +1,36 @@
+<ui:composition template="../layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:define name="title">#{i18n['account.create.title']}</ui:define>
+
+    <ui:define name="body">
+        <h1>#{i18n['account.create.title']}</h1>
+
+        <h:form styleClass="well">
+            <h:panelGrid columns="2" styleClass="details">
+                <h:outputLabel value="#{i18n['account.username']}:"/>
+                <h:inputText value="#{accountCreateBean.account.username}" styleClass="form-control"/>
+
+                <h:outputLabel value="#{i18n['account.password']}"/>
+                <h:inputSecret value="#{accountCreateBean.account.password}" redisplay="true"
+                               styleClass="form-control"/>
+
+                <h:outputLabel value="#{i18n['account.role']}:"/>
+                <b:selectOneMenu value="#{accountCreateBean.account.role}">
+                    <f:selectItems value="#{accountCreateBean.roles}"/>
+                </b:selectOneMenu>
+            </h:panelGrid>
+
+            <h:messages globalOnly="true" styleClass="alert alert-danger"/>
+
+            <h:commandLink class="btn btn-primary" action="#{accountCreateBean.create()}">
+                <span class="glyphicon glyphicon-plus"/>
+                #{i18n['button.create']}
+            </h:commandLink>
+        </h:form>
+    </ui:define>
+</ui:composition>
