@@ -20,7 +20,7 @@ public class AuthBean {
     public String logOut() {
         ((HttpSession) getCurrentInstance().getExternalContext().getSession(false)).invalidate();
 
-        return "/auth/login.xhtml?faces-redirect=true";
+        return "/admin/message/index.xhtml?faces-redirect=true";
     }
 
     public boolean loggedIn() {
@@ -28,11 +28,15 @@ public class AuthBean {
     }
 
     public boolean isModerator() {
-        return getCurrentInstance().getExternalContext().isUserInRole(MODERATOR);
+        return isInRole(MODERATOR) || isInRole(ADMINISTRATOR);
     }
 
     public boolean isAdministrator() {
-        return getCurrentInstance().getExternalContext().isUserInRole(ADMINISTRATOR);
+        return isInRole(ADMINISTRATOR);
+    }
+
+    private boolean isInRole(String role) {
+        return getCurrentInstance().getExternalContext().isUserInRole(role);
     }
 
 }

@@ -84,7 +84,9 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
     @Override
     public Collection<Message> search(String text) {
         return dao.readAll().stream()
-                .filter(m -> m.getText().toLowerCase().contains(text.toLowerCase()))
+                .filter(m -> contains(m.getText(), text) ||
+                        contains(m.getTimestamp().toString(), text) ||
+                        contains(m.getAuthor().getName(), text))
                 .sorted()
                 .collect(toList());
     }

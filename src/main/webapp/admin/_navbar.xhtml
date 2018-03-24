@@ -12,22 +12,24 @@
         <div class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <h:outputLink styleClass="navbar-brand" value="#{request.contextPath}/admin/account">
+                    <h:outputLink styleClass="navbar-brand" value="#{request.contextPath}">
                         #{i18n['title']}
                     </h:outputLink>
                 </div>
 
                 <ul class="nav navbar-nav">
                     <li>
-                        <h:outputLink value="#{request.contextPath}/admin/account">
-                            <span class="glyphicon glyphicon-user"/>
-                            #{i18n['account.index.title']}
+                        <h:outputLink value="#{request.contextPath}/admin/message/index.xhtml"
+                                      rendered="#{authBean.moderator}">
+                            <span class="glyphicon glyphicon-envelope"/>
+                            #{i18n['message.index.title']}
                         </h:outputLink>
                     </li>
                     <li>
-                        <h:outputLink value="#{request.contextPath}/admin/message">
-                            <span class="glyphicon glyphicon-envelope"/>
-                            #{i18n['message.index.title']}
+                        <h:outputLink value="#{request.contextPath}/admin/account/index.xhtml"
+                                      rendered="#{authBean.administrator}">
+                            <span class="glyphicon glyphicon-user"/>
+                            #{i18n['account.index.title']}
                         </h:outputLink>
                     </li>
                 </ul>

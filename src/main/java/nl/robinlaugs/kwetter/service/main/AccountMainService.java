@@ -103,8 +103,4 @@ public class AccountMainService extends BaseMainService<Account> implements Acco
                 .collect(toList());
     }
 
-    private boolean contains(String text, String matcher) {
-        return text.toLowerCase().contains(matcher.toLowerCase());
-    }
-
 }

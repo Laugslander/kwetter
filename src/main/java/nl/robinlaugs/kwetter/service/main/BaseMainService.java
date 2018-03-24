@@ -45,4 +45,8 @@ public abstract class BaseMainService<T extends BaseEntity> {
         this.dao = dao;
     }
 
+    boolean contains(String text, String matcher) {
+        return text.toLowerCase().contains(matcher.toLowerCase());
+    }
+
 }

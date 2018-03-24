@@ -20,7 +20,7 @@
     </session-config>
 
     <welcome-file-list>
-        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>admin/message/index.xhtml</welcome-file>
     </welcome-file-list>
 
     <context-param>
