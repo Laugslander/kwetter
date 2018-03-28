@@ -39,19 +39,19 @@
                     </h:column>
 
                     <h:column>
-                        <f:facet name="header">#{i18n['button.details']}</f:facet>
-                        <h:outputLink styleClass="btn btn-default" value="detail.xhtml">
-                            #{i18n['button.details']}
+                        <f:facet name="header">#{i18n['button.edit']}</f:facet>
+                        <h:outputLink styleClass="btn btn-default" value="edit.xhtml">
+                            <span class="glyphicon glyphicon-pencil"/>
                             <f:param name="id" value="#{account.id}"/>
                         </h:outputLink>
                     </h:column>
 
                     <h:column>
                         <f:facet name="header">#{i18n['button.delete']}</f:facet>
-                        <h:commandLink styleClass="btn btn-danger" value="#{i18n['button.delete']}"
-                                       action="#{accountIndexBean.delete(account.id)}"
+                        <h:commandLink styleClass="btn btn-danger" action="#{accountIndexBean.delete(account.id)}"
                                        onclick="return confirm('Are you sure that you want to delete this account?')">
                             <f:ajax event="action" render="accounts"/>
+                            <span class="glyphicon glyphicon-trash"/>
                         </h:commandLink>
                     </h:column>
                 </h:dataTable>
@@ -61,5 +61,11 @@
                 </h:panelGroup>
             </h:form>
         </h:panelGroup>
+        <h:form>
+            <h:outputLink styleClass="btn btn-primary" value="create.xhtml">
+                <span class="glyphicon glyphicon-plus"/>
+                #{i18n['button.create']}
+            </h:outputLink>
+        </h:form>
     </ui:define>
 </ui:composition>

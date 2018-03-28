@@ -45,7 +45,7 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
         String text = message.getText();
         User author = message.getAuthor();
 
-        if (isNull(text)) throw new NullArgumentException("Text cannot be null");
+        if (isNull(text) || text.isEmpty()) throw new NullArgumentException("Text cannot be empty");
         if (isNull(author)) throw new NullArgumentException("Author cannot be null");
 
         checkMaxTextCharacters(text);
@@ -84,7 +84,9 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
     @Override
     public Collection<Message> search(String text) {
         return dao.readAll().stream()
-                .filter(m -> m.getText().toLowerCase().contains(text.toLowerCase()))
+                .filter(m -> contains(m.getText(), text) ||
+                        contains(m.getTimestamp().toString(), text) ||
+                        contains(m.getAuthor().getName(), text))
                 .sorted()
                 .collect(toList());
     }

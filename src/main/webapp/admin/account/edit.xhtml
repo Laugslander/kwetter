@@ -8,8 +8,8 @@
     <ui:define name="title">#{i18n['account.detail.title']}</ui:define>
 
     <f:metadata>
-        <f:viewParam name="id" value="#{accountDetailBean.id}" required="true"/>
-        <f:event type="preRenderComponent" listener="#{accountDetailBean.read()}"/>
+        <f:viewParam name="id" value="#{accountEditBean.id}" required="true"/>
+        <f:event type="preRenderComponent" listener="#{accountEditBean.read()}"/>
     </f:metadata>
 
     <ui:define name="body">
@@ -18,40 +18,52 @@
         <h:form styleClass="well">
             <h:panelGrid columns="2" styleClass="details">
                 <h:outputLabel value="#{i18n['user.name']}:"/>
-                <h:outputText value="#{accountDetailBean.account.user.name}"/>
+                <h:outputText value="#{accountEditBean.account.user.name}"/>
 
                 <h:outputLabel value="#{i18n['account.username']}:"/>
-                <h:outputText value="#{accountDetailBean.account.username}"/>
+                <h:inputText value="#{accountEditBean.update.username}" styleClass="form-control"/>
+
+                <h:outputLabel value="#{i18n['account.password']}"/>
+                <h:inputSecret value="#{accountEditBean.update.password}" redisplay="true" styleClass="form-control"/>
 
                 <h:outputLabel value="#{i18n['account.role']}:"/>
-                <b:selectOneMenu value="#{accountDetailBean.account.role}">
-                    <f:selectItems value="#{accountDetailBean.roles}"/>
+                <b:selectOneMenu value="#{accountEditBean.update.role}">
+                    <f:selectItems value="#{accountEditBean.roles}"/>
                 </b:selectOneMenu>
 
                 <h:outputLabel value="#{i18n['entity.timestamp']}:"/>
-                <h:outputText value="#{accountDetailBean.account.timestamp}">
+                <h:outputText value="#{accountEditBean.account.timestamp}">
                     <f:convertDateTime type="localDateTime" pattern="dd-MM-yyyy HH:mm"/>
                 </h:outputText>
             </h:panelGrid>
 
-            <h:commandLink class="btn btn-default" value="#{i18n['button.back']}" action="index"/>
+            <h:messages globalOnly="true" styleClass="alert alert-danger"/>
+
+            <h:commandLink class="btn btn-default" action="index">
+                <span class="glyphicon glyphicon-chevron-left"/>
+                #{i18n['button.back']}
+            </h:commandLink>
             <h:outputText value="&#160;"/>
 
-            <h:commandLink class="btn btn-primary" value="#{i18n['button.update']}"
-                           action="#{accountDetailBean.update()}"/>
+            <h:commandLink class="btn btn-primary" action="#{accountEditBean.update()}">
+                <span class="glyphicon glyphicon-pencil"/>
+                #{i18n['button.update']}
+            </h:commandLink>
             <h:outputText value="&#160;"/>
 
-            <h:commandLink class="btn btn-danger" value="#{i18n['button.delete']}"
-                           action="#{accountDetailBean.delete()}"
-                           onclick="return confirm('Are you sure that you want to delete this account?')"/>
+            <h:commandLink class="btn btn-danger" action="#{accountEditBean.delete()}"
+                           onclick="return confirm('Are you sure that you want to delete this account?')">
+                <span class="glyphicon glyphicon-trash"/>
+                #{i18n['button.delete']}
+            </h:commandLink>
         </h:form>
 
         <h3>#{i18n['message.index.title']}</h3>
 
         <h:panelGroup id="messages">
-            <h:form styleClass="well">
-                <h:dataTable styleClass="table" value="#{accountDetailBean.account.user.messages}"
-                             rendered="#{not empty accountDetailBean.account.user.messages}" var="message">
+            <div class="well">
+                <h:dataTable styleClass="table" value="#{accountEditBean.account.user.messages}"
+                             rendered="#{not empty accountEditBean.account.user.messages}" var="message">
                     <h:column>
                         <f:facet name="header">#{i18n['message.text']}</f:facet>
                         <h:outputText value="#{message.text}"/>
@@ -65,10 +77,10 @@
                     </h:column>
                 </h:dataTable>
 
-                <h:panelGroup rendered="#{empty accountDetailBean.account.user.messages}">
+                <h:panelGroup rendered="#{empty accountEditBean.account.user.messages}">
                     <p>#{i18n['message.empty']}</p>
                 </h:panelGroup>
-            </h:form>
+            </div>
         </h:panelGroup>
     </ui:define>
 </ui:composition>

@@ -1,0 +1,17 @@
+<ui:composition template="../admin/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="title">#{i18n['error.title']}</ui:define>
+
+    <ui:define name="body">
+        <div class="form-signin">
+            <h1><h:outputText styleClass="form-heading" value="#{i18n['error.title']}"/></h1>
+
+            <h:outputLink styleClass="btn btn-primary form-control" value="#{request.contextPath}/auth/login.xhtml">
+                #{i18n['button.again']}
+            </h:outputLink>
+        </div>
+    </ui:define>
+</ui:composition>

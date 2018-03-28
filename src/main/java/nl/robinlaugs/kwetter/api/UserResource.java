@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -114,7 +115,7 @@ public class UserResource extends BaseResource {
 
             Collection<MessageDto> dto = service.readAll(user).stream()
                     .map(m -> new MessageDto(m, true))
-                    .collect(toSet());
+                    .collect(toList());
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {
@@ -131,7 +132,7 @@ public class UserResource extends BaseResource {
 
             Collection<MessageDto> dto = service.readOwn(user, NUMBER_OF_PERSONAL_MESSAGES).stream()
                     .map(m -> new MessageDto(m, true))
-                    .collect(toSet());
+                    .collect(toList());
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {

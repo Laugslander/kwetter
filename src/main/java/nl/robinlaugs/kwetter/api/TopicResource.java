@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import java.util.Collection;
 
 import static java.time.LocalDateTime.now;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -59,7 +60,7 @@ public class TopicResource extends BaseResource {
     public Response trending() {
         Collection<TopicDto> dto = service.readTrendingTopics(now().minusWeeks(1), NUMBER_OF_TRENDING_TOPICS).stream()
                 .map(t -> new TopicDto(t, true))
-                .collect(toSet());
+                .collect(toList());
 
         return status(OK).entity(dto).build();
     }

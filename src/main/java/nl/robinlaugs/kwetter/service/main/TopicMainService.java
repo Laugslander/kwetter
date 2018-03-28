@@ -16,7 +16,7 @@ import java.util.Collection;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Robin Laugs
@@ -37,7 +37,7 @@ public class TopicMainService extends BaseMainService<Topic> implements TopicSer
     public void create(Topic topic) throws Exception {
         String name = topic.getName();
 
-        if (isNull(name)) throw new NullArgumentException("Name cannot be null");
+        if (isNull(name) || name.isEmpty()) throw new NullArgumentException("Name cannot be empty");
 
         dao.create(topic);
     }
@@ -74,9 +74,9 @@ public class TopicMainService extends BaseMainService<Topic> implements TopicSer
         Collection<Topic> topics = dao.readFromTimestamp(from);
 
         return topics.stream()
-                .sorted()
                 .limit(limit)
-                .collect(toSet());
+                .sorted()
+                .collect(toList());
     }
 
 }

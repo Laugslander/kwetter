@@ -23,3 +23,29 @@ body {
 .details tr td {
     padding: 5px 30px 5px 0;
 }
+
+.form-signin {
+    max-width: 330px;
+    margin: 0 auto;
+}
+
+.form-signin .form-heading {
+    margin: 10px;
+}
+
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px;
+}
+
+.form-error {
+    list-style-type: none;
+}
+
+ul {
+    list-style-type: none;
+}
