@@ -6,7 +6,8 @@
 
     <persistence-unit name="kwetter_development">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <jta-data-source>jdbc/kwetter_resource</jta-data-source>
+
+        <jta-data-source>jdbc/kwetter_development_resource</jta-data-source>
 
         <class>nl.robinlaugs.kwetter.domain.BaseEntity</class>
         <class>nl.robinlaugs.kwetter.domain.Account</class>
