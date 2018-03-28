@@ -57,22 +57,29 @@ public class TestDataService {
 
             User user1 = account1.getUser();
             user1.setName("Robin Laugs");
+            user1.setAvatar("https://avatars0.githubusercontent.com/u/16139317?s=460&v=4");
             user1.setLocation("Ohé en Laak");
+            user1.setWebsite("www.robinlaugs.nl");
+            user1.setBio("Ontwikkelaar bij Kwetter");
 
             User user2 = account2.getUser();
             user2.setName("Luuk Hermans");
+            user2.setAvatar("https://avatars3.githubusercontent.com/u/11488443?s=460&v=4");
             user2.setLocation("Weert");
 
             User user3 = account3.getUser();
             user3.setName("Raymond Limpens");
+            user3.setAvatar("https://avatars3.githubusercontent.com/u/21307259?s=460&v=4");
             user3.setLocation("Elsloo");
 
             User user4 = account4.getUser();
             user4.setName("Lesley Vente");
+            user4.setAvatar("https://avatars2.githubusercontent.com/u/5957362?s=460&v=4");
             user4.setLocation("Brandevoort");
 
             User user5 = account5.getUser();
             user5.setName("Oscar de Leeuw");
+            user5.setAvatar("https://avatars3.githubusercontent.com/u/4661294?s=460&v=4");
             user5.setLocation("Eindhoven");
 
             userService.follow(user1, user2);

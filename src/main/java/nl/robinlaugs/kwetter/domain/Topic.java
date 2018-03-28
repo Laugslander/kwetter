@@ -34,7 +34,7 @@ public class Topic extends BaseEntity {
 
     @Override
     public int compareTo(BaseEntity o) {
-        int compare = compare(messages.size(), ((Topic) o).messages.size());
+        int compare = compare(((Topic) o).messages.size(), messages.size());
         return compare == 0 ? super.compareTo(o) : compare;
     }
 

@@ -16,7 +16,7 @@ import java.util.Collection;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Robin Laugs
@@ -74,9 +74,9 @@ public class TopicMainService extends BaseMainService<Topic> implements TopicSer
         Collection<Topic> topics = dao.readFromTimestamp(from);
 
         return topics.stream()
-                .sorted()
                 .limit(limit)
-                .collect(toSet());
+                .sorted()
+                .collect(toList());
     }
 
 }

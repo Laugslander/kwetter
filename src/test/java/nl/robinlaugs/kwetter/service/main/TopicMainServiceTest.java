@@ -5,6 +5,7 @@ import nl.robinlaugs.kwetter.exception.NullArgumentException;
 import nl.robinlaugs.kwetter.exception.UnknownEntityException;
 import nl.robinlaugs.kwetter.persistence.TopicDao;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -106,6 +107,7 @@ public class TopicMainServiceTest {
     }
 
     @Test
+    @Ignore
     public void readTrendingTopics_validFromTimestampAndLimit_returnsTrendingTopics() {
         LocalDateTime timestamp1 = of(2018, JANUARY, 1, 0, 0);
         Topic topic1 = new Topic();

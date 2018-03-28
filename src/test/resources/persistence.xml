@@ -5,7 +5,7 @@
 
     <persistence-unit name="kwetter_test">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <jta-data-source>jdbc/kwetter_test_pool</jta-data-source>
+        <jta-data-source>jdbc/kwetter_test_resource</jta-data-source>
 
         <class>nl.robinlaugs.kwetter.domain.BaseEntity</class>
         <class>nl.robinlaugs.kwetter.domain.Account</class>

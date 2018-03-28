@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 import static nl.robinlaugs.kwetter.domain.User.MAX_BIO_CHARACTERS;
 
 /**
@@ -79,7 +79,9 @@ public class UserMainService extends BaseMainService<User> implements UserServic
         Collection<Message> messages = new TreeSet<>(user.getMessages());
         user.getFollowings().forEach(f -> messages.addAll(f.getMessages()));
 
-        return messages;
+        return messages.stream()
+                .sorted()
+                .collect(toList());
     }
 
     @Override
@@ -87,7 +89,7 @@ public class UserMainService extends BaseMainService<User> implements UserServic
         return user.getMessages().stream()
                 .sorted()
                 .limit(limit)
-                .collect(toSet());
+                .collect(toList());
     }
 
     @Override
