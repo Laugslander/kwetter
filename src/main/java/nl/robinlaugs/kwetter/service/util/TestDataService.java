@@ -97,7 +97,6 @@ public class TestDataService {
             userService.follow(user4, user3);
             userService.follow(user4, user5);
 
-            userService.follow(user5, user1);
             userService.follow(user5, user3);
             userService.follow(user5, user4);
 
