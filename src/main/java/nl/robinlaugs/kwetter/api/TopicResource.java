@@ -1,6 +1,8 @@
 package nl.robinlaugs.kwetter.api;
 
+import nl.robinlaugs.kwetter.api.dto.MessageDto;
 import nl.robinlaugs.kwetter.api.dto.TopicDto;
+import nl.robinlaugs.kwetter.domain.Topic;
 import nl.robinlaugs.kwetter.service.TopicService;
 
 import javax.ejb.Stateless;
@@ -26,7 +28,7 @@ import static javax.ws.rs.core.Response.status;
 @Path("topics")
 public class TopicResource extends BaseResource {
 
-    private static final int NUMBER_OF_TRENDING_TOPICS = 10;
+    private static final int NUMBER_OF_TRENDING_TOPICS = 5;
 
     @Inject
     private TopicService service;
@@ -47,6 +49,24 @@ public class TopicResource extends BaseResource {
     public Response getTopic(@PathParam("id") Long id) {
         try {
             TopicDto dto = new TopicDto(service.read(id), true);
+
+            return status(OK).entity(dto).build();
+        } catch (Exception e) {
+            return exceptionDto(e);
+        }
+    }
+
+    @GET
+    @Path("{id}/messages")
+    @Produces(APPLICATION_JSON)
+    public Response topicMessages(@PathParam("id") Long id) {
+        try {
+            Topic topic = service.read(id);
+
+            Collection<MessageDto> dto = topic.getMessages().stream()
+                    .sorted()
+                    .map(m -> new MessageDto(m, true))
+                    .collect(toList());
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {

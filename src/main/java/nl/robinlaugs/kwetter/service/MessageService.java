@@ -21,8 +21,8 @@ public interface MessageService extends GenericService<Message> {
     /**
      * Searches all existing {@link Message Messages}.
      *
-     * @param text The search query which should (partially) match the {@code text} of existing {@link Message Messages}.
-     * @return The {@link Message messages} that were found.
+     * @param text The search query which should (partially) match the existing {@link Message Messages}.
+     * @return The {@link Message Messages} that were found.
      */
     Collection<Message> search(String text);
 

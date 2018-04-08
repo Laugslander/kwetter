@@ -74,8 +74,8 @@ public class TopicMainService extends BaseMainService<Topic> implements TopicSer
         Collection<Topic> topics = dao.readFromTimestamp(from);
 
         return topics.stream()
-                .limit(limit)
                 .sorted()
+                .limit(limit)
                 .collect(toList());
     }
 

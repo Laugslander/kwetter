@@ -43,4 +43,12 @@ public interface UserService extends GenericService<User> {
      */
     void unfollow(User user, User follower);
 
+    /**
+     * Searches all existing {@link User Users}.
+     *
+     * @param text The search query which should (partially) match the existing {@link User Users}.
+     * @return The {@link User Users} that were found.
+     */
+    Collection<User> search(String text);
+
 }

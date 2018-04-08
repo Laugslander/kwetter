@@ -1,6 +1,7 @@
 package nl.robinlaugs.kwetter.api;
 
 import nl.robinlaugs.kwetter.api.dto.MessageDto;
+import nl.robinlaugs.kwetter.api.dto.UserDto;
 import nl.robinlaugs.kwetter.domain.Message;
 import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.service.MessageService;
@@ -12,6 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.CREATED;
@@ -57,13 +59,34 @@ public class MessageResource extends BaseResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    public Response postMessage(Message message) {
+    public Response postMessage(Message data) {
         try {
+            User author = userService.read(data.getAuthor().getId());
+            Message message = new Message(data.getText());
+            message.setAuthor(author);
+
             messageService.create(message);
 
             MessageDto dto = new MessageDto(message, true);
 
             return status(CREATED).entity(dto).build();
+        } catch (Exception e) {
+            return exceptionDto(e);
+        }
+    }
+
+    @GET
+    @Path("{id}/likes")
+    @Produces(APPLICATION_JSON)
+    public Response getLikes(@PathParam("id") Long id) {
+        try {
+            Message message = messageService.read(id);
+
+            Collection<UserDto> dto = message.getLikes().stream()
+                    .map(u -> new UserDto(u, true))
+                    .collect(toList());
+
+            return status(OK).entity(dto).build();
         } catch (Exception e) {
             return exceptionDto(e);
         }
@@ -115,7 +138,7 @@ public class MessageResource extends BaseResource {
     public Response searchMessages(@PathParam("searchString") String searchString) {
         Collection<MessageDto> dto = messageService.search(searchString).stream()
                 .map(m -> new MessageDto(m, true))
-                .collect(toSet());
+                .collect(toList());
 
         return status(OK).entity(dto).build();
     }

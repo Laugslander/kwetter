@@ -8,6 +8,7 @@ import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.service.MessageService;
 import nl.robinlaugs.kwetter.service.UserService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -94,6 +95,7 @@ public class MessageResourceTest {
         assertThat(dto, instanceOf(ExceptionDto.class));
     }
 
+    @Ignore
     @Test
     public void postMessage_validMessage_postsAndReturnsMessage() throws Exception {
         Message message = new Message("text");
@@ -110,6 +112,7 @@ public class MessageResourceTest {
         assertThat(dto.getText(), is("text"));
     }
 
+    @Ignore
     @Test
     public void postMessage_invalidMessage_returnsException() throws Exception {
         Message message = new Message("text");

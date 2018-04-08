@@ -140,4 +140,32 @@ public class UserResource extends BaseResource {
         }
     }
 
+    @GET
+    @Path("{id}/messagesMentioned")
+    @Produces(APPLICATION_JSON)
+    public Response mentionedMessages(@PathParam("id") Long id) {
+        try {
+            User user = service.read(id);
+
+            Collection<MessageDto> dto = user.getMentioned().stream()
+                    .map(m -> new MessageDto(m, true))
+                    .collect(toList());
+
+            return status(OK).entity(dto).build();
+        } catch (Exception e) {
+            return exceptionDto(e);
+        }
+    }
+
+    @GET
+    @Path("search/{searchString}")
+    @Produces(APPLICATION_JSON)
+    public Response searchMessages(@PathParam("searchString") String searchString) {
+        Collection<UserDto> dto = service.search(searchString).stream()
+                .map(u -> new UserDto(u, true))
+                .collect(toList());
+
+        return status(OK).entity(dto).build();
+    }
+
 }

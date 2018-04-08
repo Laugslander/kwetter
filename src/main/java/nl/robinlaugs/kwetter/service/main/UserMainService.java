@@ -104,6 +104,16 @@ public class UserMainService extends BaseMainService<User> implements UserServic
         follower.getFollowings().remove(user);
     }
 
+    @Override
+    public Collection<User> search(String text) {
+        return dao.readAll().stream()
+                .filter(m -> contains(m.getName(), text) ||
+                        contains(m.getTimestamp().toString(), text) ||
+                        contains(m.getAccount().getUsername(), text))
+                .sorted()
+                .collect(toList());
+    }
+
     private void checkMaxBioCharacters(String bio) throws InputConstraintViolationException {
         if (nonNull(bio) && bio.length() > MAX_BIO_CHARACTERS) {
             String message = format("Maximum number of bio characters (%d) exceeded.", MAX_BIO_CHARACTERS);

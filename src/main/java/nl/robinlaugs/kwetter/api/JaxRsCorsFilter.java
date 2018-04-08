@@ -14,6 +14,9 @@ public class JaxRsCorsFilter implements ContainerResponseFilter {
     @Override
     public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext cres) {
         cres.getHeaders().add("Access-Control-Allow-Origin", "*");
+        cres.getHeaders().add("Access-Control-Allow-Credentials", "*");
+        cres.getHeaders().add("Access-Control-Allow-Headers", "*");
+        cres.getHeaders().add("Access-Control-Allow-Methods", "*");
     }
 
 }
