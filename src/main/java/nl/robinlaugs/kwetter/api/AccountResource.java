@@ -1,15 +1,20 @@
 package nl.robinlaugs.kwetter.api;
 
+import io.jsonwebtoken.Jwts;
 import nl.robinlaugs.kwetter.api.dto.AccountDto;
+import nl.robinlaugs.kwetter.api.dto.CredentialDto;
 import nl.robinlaugs.kwetter.domain.Account;
 import nl.robinlaugs.kwetter.service.AccountService;
+import nl.robinlaugs.kwetter.service.auth.KeyService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
+import java.util.Date;
 
+import static io.jsonwebtoken.SignatureAlgorithm.HS512;
 import static java.util.stream.Collectors.toSet;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.CREATED;
@@ -24,12 +29,15 @@ import static javax.ws.rs.core.Response.status;
 public class AccountResource extends BaseResource {
 
     @Inject
-    private AccountService service;
+    private AccountService accountService;
+
+    @Inject
+    private KeyService keyService;
 
     @GET
     @Produces(APPLICATION_JSON)
     public Response getAccounts() {
-        Collection<AccountDto> dto = service.readAll().stream()
+        Collection<AccountDto> dto = accountService.readAll().stream()
                 .map(a -> new AccountDto(a, true))
                 .collect(toSet());
 
@@ -41,7 +49,7 @@ public class AccountResource extends BaseResource {
     @Produces(APPLICATION_JSON)
     public Response getAccount(@PathParam("id") Long id) {
         try {
-            AccountDto dto = new AccountDto(service.read(id), true);
+            AccountDto dto = new AccountDto(accountService.read(id), true);
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {
@@ -54,7 +62,7 @@ public class AccountResource extends BaseResource {
     @Produces(APPLICATION_JSON)
     public Response postAccount(Account account) {
         try {
-            service.create(account);
+            accountService.create(account);
 
             AccountDto dto = new AccountDto(account, true);
 
@@ -70,7 +78,31 @@ public class AccountResource extends BaseResource {
     @Produces(APPLICATION_JSON)
     public Response patchAccount(@PathParam("id") Long id, Account update) {
         try {
-            AccountDto dto = new AccountDto(service.update(id, update), true);
+            AccountDto dto = new AccountDto(accountService.update(id, update), true);
+
+            return status(OK).entity(dto).build();
+        } catch (Exception e) {
+            return exceptionDto(e);
+        }
+    }
+
+    @POST
+    @Path("/login")
+    @Consumes(APPLICATION_JSON)
+    public Response authenticate(Account account) {
+        try {
+            String username = account.getUsername();
+            String password = account.getPassword();
+
+            account = accountService.read(username, password);
+
+            String token = Jwts.builder()
+                    .setSubject(account.getUsername())
+                    .setIssuedAt(new Date())
+                    .signWith(HS512, keyService.generate())
+                    .compact();
+
+            CredentialDto dto = new CredentialDto(account.getUser().getId(), token);
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package nl.robinlaugs.kwetter.api;
 
+import nl.robinlaugs.kwetter.api.auth.JwtTokenRequired;
 import nl.robinlaugs.kwetter.api.dto.MessageDto;
 import nl.robinlaugs.kwetter.api.dto.UserDto;
 import nl.robinlaugs.kwetter.domain.Message;
@@ -59,6 +60,7 @@ public class MessageResource extends BaseResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
+    @JwtTokenRequired
     public Response postMessage(Message data) {
         try {
             User author = userService.read(data.getAuthor().getId());
@@ -95,6 +97,7 @@ public class MessageResource extends BaseResource {
     @POST
     @Path("{id}/likes/{likerId}")
     @Produces(APPLICATION_JSON)
+    @JwtTokenRequired
     public Response like(@PathParam("id") Long id, @PathParam("likerId") Long likerId) {
         try {
             Message message = messageService.read(id);
@@ -115,6 +118,7 @@ public class MessageResource extends BaseResource {
     @DELETE
     @Path("{id}/likes/{likerId}")
     @Produces(APPLICATION_JSON)
+    @JwtTokenRequired
     public Response unlike(@PathParam("id") Long id, @PathParam("likerId") Long likerId) {
         try {
             Message message = messageService.read(id);
