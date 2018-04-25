@@ -20,7 +20,7 @@ public class MessageDto extends BaseEntityDto {
     private Collection<UserDto> mentions;
     private Collection<TopicDto> topics;
 
-    MessageDto(Message message) {
+    public MessageDto(Message message) {
         super(message.getId(), message.getTimestamp());
 
         text = message.getText();

@@ -5,6 +5,7 @@ import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.service.interceptor.MentionParsingInterceptor;
 import nl.robinlaugs.kwetter.service.interceptor.TextParsingInterceptor;
 import nl.robinlaugs.kwetter.service.interceptor.TopicParsingInterceptor;
+import nl.robinlaugs.kwetter.service.listener.MessageListener;
 
 import javax.interceptor.Interceptors;
 import java.util.Collection;
@@ -41,5 +42,19 @@ public interface MessageService extends GenericService<Message> {
      * @param user    The {@link User} that should unlike the {@link Message}.
      */
     void unlike(Message message, User user);
+
+    /**
+     * Adds a new message {@link MessageListener}.
+     *
+     * @param listener Listener of type {@link MessageListener}.
+     */
+    void addListener(MessageListener listener);
+
+    /**
+     * Removes an existing {@link MessageListener}.
+     *
+     * @param listener Listener of type {@link MessageListener}.
+     */
+    void removeListener(MessageListener listener);
 
 }

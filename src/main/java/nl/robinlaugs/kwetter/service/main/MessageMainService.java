@@ -11,12 +11,15 @@ import nl.robinlaugs.kwetter.service.MessageService;
 import nl.robinlaugs.kwetter.service.interceptor.MentionParsingInterceptor;
 import nl.robinlaugs.kwetter.service.interceptor.TextParsingInterceptor;
 import nl.robinlaugs.kwetter.service.interceptor.TopicParsingInterceptor;
+import nl.robinlaugs.kwetter.service.listener.MessageListener;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
@@ -34,9 +37,13 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
     @JpaDao
     private MessageDao dao;
 
+    private Set<MessageListener> listeners;
+
     @PostConstruct
     private void setUp() {
         super.setDao(dao);
+
+        listeners = new HashSet<>();
     }
 
     @Override
@@ -55,6 +62,8 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
         message.getTopics().forEach(t -> t.getMessages().add(message));
 
         dao.create(message);
+
+        listeners.forEach(l -> l.onMessage(message));
     }
 
     @Override
@@ -105,6 +114,16 @@ public class MessageMainService extends BaseMainService<Message> implements Mess
         user.getLiked().remove(message);
 
         dao.update(message);
+    }
+
+    @Override
+    public void addListener(MessageListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(MessageListener listener) {
+        listeners.remove(listener);
     }
 
     private void checkMaxTextCharacters(String text) throws InputConstraintViolationException {

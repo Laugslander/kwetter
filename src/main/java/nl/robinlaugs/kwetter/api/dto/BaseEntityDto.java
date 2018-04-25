@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * @author Robin Laugs
  */
 @Getter
-abstract class BaseEntityDto {
+public abstract class BaseEntityDto {
 
     private Long id;
     private LocalDateTime timestamp;
