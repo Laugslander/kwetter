@@ -1,11 +1,10 @@
 package nl.robinlaugs.kwetter.websocket.message;
 
-import nl.robinlaugs.kwetter.api.dto.MessageDto;
+import nl.robinlaugs.kwetter.api.v1.dto.MessageDto;
 import nl.robinlaugs.kwetter.domain.Message;
 import nl.robinlaugs.kwetter.service.MessageService;
 import nl.robinlaugs.kwetter.service.listener.MessageListener;
 import nl.robinlaugs.kwetter.websocket.HttpSessionProvider;
-import nl.robinlaugs.kwetter.websocket.message.codec.MessageJsonDecoder;
 import nl.robinlaugs.kwetter.websocket.message.codec.MessageJsonEncoder;
 
 import javax.inject.Inject;
@@ -25,7 +24,6 @@ import static java.util.logging.Level.INFO;
 @ServerEndpoint(
         value = "/socket/{id}",
         encoders = MessageJsonEncoder.class,
-        decoders = MessageJsonDecoder.class,
         configurator = HttpSessionProvider.class
 )
 public class LiveMessageResource implements MessageListener {
@@ -62,6 +60,6 @@ public class LiveMessageResource implements MessageListener {
     public void onMessage(Message message) {
         message.getAuthor().getFollowers().stream()
                 .filter(f -> f.getId().toString().equals(id))
-                .forEach(f -> session.getAsyncRemote().sendObject(new MessageDto(message)));
+                .forEach(f -> session.getAsyncRemote().sendObject(new MessageDto(message, true)));
     }
 }
