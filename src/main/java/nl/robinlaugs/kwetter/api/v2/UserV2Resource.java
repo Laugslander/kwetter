@@ -1,7 +1,7 @@
 package nl.robinlaugs.kwetter.api.v2;
 
-import nl.robinlaugs.kwetter.api.v2.dto.AccountV2Dto;
-import nl.robinlaugs.kwetter.service.AccountService;
+import nl.robinlaugs.kwetter.api.v2.dto.UserV2Dto;
+import nl.robinlaugs.kwetter.service.UserService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -21,18 +21,18 @@ import static javax.ws.rs.core.Response.status;
  * @author Robin Laugs
  */
 @Stateless
-@Path("accountsv2")
-public class AccountV2Resource extends BaseV2Resource {
+@Path("usersv2")
+public class UserV2Resource extends BaseV2Resource {
 
     @Inject
-    private AccountService accountService;
+    private UserService userService;
 
     @GET
     @Produces(APPLICATION_JSON)
-    public Response getAccounts() {
-        Collection<AccountV2Dto> dto = accountService.readAll()
+    public Response getUsers() {
+        Collection<UserV2Dto> dto = userService.readAll()
                 .stream()
-                .map(a -> new AccountV2Dto(a, uri.getBaseUri(), true))
+                .map(u -> new UserV2Dto(u, uri.getBaseUri(), true))
                 .collect(toList());
 
         return status(OK).entity(dto).build();
@@ -41,9 +41,9 @@ public class AccountV2Resource extends BaseV2Resource {
     @GET
     @Path("{id}")
     @Produces(APPLICATION_JSON)
-    public Response getAccount(@PathParam("id") Long id) {
+    public Response getUser(@PathParam("id") Long id) {
         try {
-            AccountV2Dto dto = new AccountV2Dto(accountService.read(id), uri.getBaseUri(), true);
+            UserV2Dto dto = new UserV2Dto(userService.read(id), uri.getBaseUri(), true);
 
             return status(OK).entity(dto).build();
         } catch (Exception e) {

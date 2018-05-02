@@ -4,9 +4,11 @@ import lombok.Getter;
 import nl.robinlaugs.kwetter.domain.Account;
 
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import java.net.URI;
 
 import static java.lang.String.format;
+import static java.util.Objects.nonNull;
 import static javax.json.Json.createObjectBuilder;
 
 /**
@@ -17,43 +19,43 @@ public class AccountV2Dto extends BaseEntityV2Dto {
 
     private transient Account account;
 
-    public AccountV2Dto(Account account, URI uri) {
+    public AccountV2Dto(Account account, URI uri, boolean fat) {
         super(account.getId(), uri);
 
         this.account = account;
 
-        data = generateData();
+        data = generateData(Account.class, fat);
     }
 
-    private JsonObject generateData() {
+    @Override
+    JsonObject getRelationship() {
         return createObjectBuilder()
-                .add("type", account.getClass().getSimpleName().toLowerCase())
                 .add("id", id)
-                .add("liks", getLinks())
-                .add("attributes", getAttributes())
-                .add("relationships", getRelationships())
+                .add("link", format("%saccountsv2/%d", uri, id))
+                .add("attributes", generateAttributes())
                 .build();
     }
 
-    private JsonObject getLinks() {
-        return createObjectBuilder()
-                .add("self", format("%saccountsv2/%d", uri, id))
-                .build();
+    @Override
+    JsonObject generateAttributes() {
+        String username = account.getUsername();
+        String role = account.getRole().toString();
+
+        JsonObjectBuilder builder = createObjectBuilder()
+                .add("timestamp", account.getTimestamp().toString());
+
+        if (nonNull(username)) builder.add("username", username);
+        if (nonNull(role)) builder.add("role", role);
+
+        return builder.build();
     }
 
-    private JsonObject getAttributes() {
-        return createObjectBuilder()
-                .add("timestamp", account.getTimestamp().toString())
-                .add("username", account.getUsername())
-                .add("role", account.getRole().toString())
-                .build();
-    }
-
-    private JsonObject getRelationships() {
-        UserV2Dto user = new UserV2Dto(account.getUser(), uri);
+    @Override
+    JsonObject generateRelationships() {
+        UserV2Dto user = new UserV2Dto(account.getUser(), uri, false);
 
         return createObjectBuilder()
-                .add("user", user.getRelation())
+                .add("user", user.getRelationship())
                 .build();
     }
 
