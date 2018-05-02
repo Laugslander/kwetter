@@ -1,8 +1,8 @@
-package nl.robinlaugs.kwetter.api;
+package nl.robinlaugs.kwetter.api.v1;
 
 import nl.robinlaugs.kwetter.api.auth.JwtTokenRequired;
-import nl.robinlaugs.kwetter.api.dto.MessageDto;
-import nl.robinlaugs.kwetter.api.dto.UserDto;
+import nl.robinlaugs.kwetter.api.v1.dto.MessageDto;
+import nl.robinlaugs.kwetter.api.v1.dto.UserDto;
 import nl.robinlaugs.kwetter.domain.Message;
 import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.service.MessageService;
@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 import java.util.Collection;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -39,7 +38,7 @@ public class MessageResource extends BaseResource {
     public Response getMessages() {
         Collection<MessageDto> dto = messageService.readAll().stream()
                 .map(m -> new MessageDto(m, true))
-                .collect(toSet());
+                .collect(toList());
 
         return status(OK).entity(dto).build();
     }

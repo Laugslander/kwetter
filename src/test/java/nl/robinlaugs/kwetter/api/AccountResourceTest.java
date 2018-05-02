@@ -1,7 +1,8 @@
 package nl.robinlaugs.kwetter.api;
 
-import nl.robinlaugs.kwetter.api.dto.AccountDto;
-import nl.robinlaugs.kwetter.api.dto.ExceptionDto;
+import nl.robinlaugs.kwetter.api.v1.AccountResource;
+import nl.robinlaugs.kwetter.api.v1.dto.AccountDto;
+import nl.robinlaugs.kwetter.api.v1.dto.ExceptionDto;
 import nl.robinlaugs.kwetter.domain.Account;
 import nl.robinlaugs.kwetter.service.AccountService;
 import org.junit.Before;

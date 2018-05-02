@@ -1,6 +1,6 @@
-package nl.robinlaugs.kwetter.api;
+package nl.robinlaugs.kwetter.api.v1;
 
-import nl.robinlaugs.kwetter.api.dto.ExceptionDto;
+import nl.robinlaugs.kwetter.api.v1.dto.ExceptionDto;
 
 import javax.ws.rs.core.Response;
 

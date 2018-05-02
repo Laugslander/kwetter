@@ -1,4 +1,4 @@
-package nl.robinlaugs.kwetter.api.dto;
+package nl.robinlaugs.kwetter.api.v1.dto;
 
 import lombok.Getter;
 import nl.robinlaugs.kwetter.domain.Message;
@@ -36,4 +36,5 @@ public class MessageDto extends BaseEntityDto {
             topics = message.getTopics().stream().map(TopicDto::new).collect(toSet());
         }
     }
+
 }

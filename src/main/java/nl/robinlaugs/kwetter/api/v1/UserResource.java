@@ -1,7 +1,7 @@
-package nl.robinlaugs.kwetter.api;
+package nl.robinlaugs.kwetter.api.v1;
 
-import nl.robinlaugs.kwetter.api.dto.MessageDto;
-import nl.robinlaugs.kwetter.api.dto.UserDto;
+import nl.robinlaugs.kwetter.api.v1.dto.MessageDto;
+import nl.robinlaugs.kwetter.api.v1.dto.UserDto;
 import nl.robinlaugs.kwetter.domain.User;
 import nl.robinlaugs.kwetter.service.UserService;
 

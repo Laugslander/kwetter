@@ -1,8 +1,8 @@
-package nl.robinlaugs.kwetter.api;
+package nl.robinlaugs.kwetter.api.v1;
 
 import io.jsonwebtoken.Jwts;
-import nl.robinlaugs.kwetter.api.dto.AccountDto;
-import nl.robinlaugs.kwetter.api.dto.CredentialDto;
+import nl.robinlaugs.kwetter.api.v1.dto.AccountDto;
+import nl.robinlaugs.kwetter.api.v1.dto.CredentialDto;
 import nl.robinlaugs.kwetter.domain.Account;
 import nl.robinlaugs.kwetter.service.AccountService;
 import nl.robinlaugs.kwetter.service.auth.KeyService;
@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS512;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -39,7 +39,7 @@ public class AccountResource extends BaseResource {
     public Response getAccounts() {
         Collection<AccountDto> dto = accountService.readAll().stream()
                 .map(a -> new AccountDto(a, true))
-                .collect(toSet());
+                .collect(toList());
 
         return status(OK).entity(dto).build();
     }

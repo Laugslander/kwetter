@@ -1,4 +1,4 @@
-package nl.robinlaugs.kwetter.api.dto;
+package nl.robinlaugs.kwetter.api.v1.dto;
 
 /**
  * @author Robin Laugs
