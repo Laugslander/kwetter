@@ -34,9 +34,7 @@ public abstract class BaseEntityV2Dto implements Serializable {
                 .add("link", format("%s%ssv2/%d", uri, name, id))
                 .add("attributes", generateAttributes());
 
-        if (rich) {
-            builder.add("relationships", generateRelationships());
-        }
+        if (rich) builder.add("relationships", generateRelationships());
 
         return builder.build();
     }
